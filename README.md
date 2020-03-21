@@ -1,6 +1,6 @@
 # CustomHierarchy
 
-![](https://img.shields.io/badge/dynamic/json.svg?uri=https://raw.githubusercontent.com/hananoki/CustomHierarchy/package.json&label=&query=$.version&prefix=v)
+![](https://img.shields.io/badge/dynamic/json.svg?uri=https://raw.githubusercontent.com/hananoki/CustomHierarchy/master/package.json&label=&query=$.version&prefix=v)
 ![](https://img.shields.io/badge/unity-2018.3%20or%20later-green.svg)
 
 [Japanese](https://translate.google.com/translate?sl=en&tl=ja&u=https://github.com/hananoki/CustomHierarchy) (by Google Translate)
