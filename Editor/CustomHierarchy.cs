@@ -18,28 +18,19 @@ namespace Hananoki.CustomHierarchy {
 		const int WIDTH = 16;
 
 		public class Styles {
-			public Texture2D PrefabNormal;
-			public Texture2D PrefabModel;
-			public Texture2D MissingPrefabInstance;
-			public Texture2D DisconnectedPrefab;
-			public Texture2D DisconnectedModelPrefab;
+			public Texture2D PrefabNormal => Icon.Get( "$PrefabNormal" );
+			public Texture2D PrefabModel => Icon.Get( "$PrefabModel" );
+			public Texture2D MissingPrefabInstance => Icon.Get( "$MissingPrefabInstance" );
+			public Texture2D DisconnectedPrefab => Icon.Get( "$DisconnectedPrefab" );
+			public Texture2D DisconnectedModelPrefab => Icon.Get( "$DisconnectedModelPrefab" );
 			public GUIStyle ControlLabel;
 			public Color lineColor;
 #if LOCAL_TEST
-			public Texture2D TreeLine;
-			public Texture2D TreeLineB;
+			public Texture2D TreeLine => Icon.Get( "CH_I" );
+			public Texture2D TreeLineB => Icon.Get( "CH_T" );
 #endif
 			public Styles() {
-				PrefabNormal = Icon.Get( "$PrefabNormal" );
-				PrefabModel = Icon.Get( "$PrefabModel" );
-				MissingPrefabInstance = Icon.Get( "$MissingPrefabInstance" );
-				DisconnectedPrefab = Icon.Get( "$DisconnectedPrefab" );
-				DisconnectedModelPrefab = Icon.Get( "$DisconnectedModelPrefab" );
 				ControlLabel = "ControlLabel";
-#if LOCAL_TEST
-				TreeLine = GUIDUtils.LoadAssetAtGUID<Texture2D>( "bfbff4bf967d53348aa28bc2da2275ba" );
-				TreeLineB = GUIDUtils.LoadAssetAtGUID<Texture2D>( "48f61e42499c89849a1d9591449308e3" );
-#endif
 			}
 		}
 
