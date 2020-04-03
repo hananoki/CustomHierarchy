@@ -2,6 +2,7 @@
 
 using UnityEditor;
 using UnityEngine;
+using Hananoki.Extensions;
 
 using E = Hananoki.CustomHierarchy.SettingsEditor;
 using SS = Hananoki.SharedModule.S;

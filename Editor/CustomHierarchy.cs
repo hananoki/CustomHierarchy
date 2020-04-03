@@ -6,6 +6,7 @@ using UnityEditor.SceneManagement;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Hananoki.Extensions;
 
 using E = Hananoki.CustomHierarchy.SettingsEditor;
 using SS = Hananoki.SharedModule.S;
