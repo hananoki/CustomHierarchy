@@ -1,14 +1,14 @@
 ﻿
 using UnityEditor;
-using UnityEngine;
-using System.Collections.Generic;
+
 namespace Hananoki.CustomHierarchy {
   public static class Package {
     public const string name = "CustomHierarchy";
     public const string editorPrefName = "Hananoki.CustomHierarchy";
-    public const string version = "0.5.2-preview";
+    public const string version = "0.5.3-preview";
   }
   
+#if UNITY_EDITOR
   [EditorLocalizeClass]
   public class LocalizeEvent {
     [EditorLocalizeMethod]
@@ -20,31 +20,5 @@ namespace Hananoki.CustomHierarchy {
       }
     }
   }
-	public static class Icon {
-		static Dictionary<string, Texture2D> icons;
-		public static Texture2D Get( string s ) {
-			if( icons == null ) {
-				icons = new Dictionary<string, Texture2D>();
-			}
-			bool load = false;
-			if( !icons.ContainsKey( s ) ) load = true;
-			else if( icons[ s ] == null ) load = true;
-			if( load ) {
-				for( int i = 0; i < SharedEmbed.num; i++ ) {
-					if( SharedEmbed.n[ i ] != s ) continue;
-					var bb = B64.Decode( "iVBORw0KGgoAAAAN" + SharedEmbed.i[ i ] );
-					var t = new Texture2D( SharedEmbed.x[ i ], SharedEmbed.y[ i ] );
-					t.LoadImage( bb );
-					t.hideFlags |= HideFlags.DontUnloadUnusedAsset;
-					if( icons.ContainsKey( s ) ) {
-						icons[ s ] = t;
-					}
-					else {
-						icons.Add( SharedEmbed.n[ i ], t );
-					}
-				}
-			}
-			return icons[ s ];
-		}
-	}
+#endif
 }

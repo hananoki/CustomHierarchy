@@ -1,12 +1,13 @@
 ﻿#pragma warning disable 618
 
+using Hananoki.Extensions;
 using Hananoki.Reflection;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Hananoki.Extensions;
 
 using E = Hananoki.CustomHierarchy.SettingsEditor;
 using SS = Hananoki.SharedModule.S;
@@ -41,7 +42,7 @@ namespace Hananoki.CustomHierarchy {
 		static CustomHierarchy() {
 			E.Load();
 			EditorApplication.hierarchyWindowItemOnGUI += HierarchyWindowItemCallback;
-			EditorSceneManager.sceneOpened += (scene,mode)=> { Debug.Log( "sceneOpened" ); };
+			EditorSceneManager.sceneOpened += ( scene, mode ) => { Debug.Log( "sceneOpened" ); };
 		}
 
 
@@ -103,7 +104,7 @@ namespace Hananoki.CustomHierarchy {
 				DrawActiveButtonGUI( go, rc );
 			}
 			if( E.i.prefabStatus ) {
-				
+
 				if( DrawPrefabIconGUI( rc, go ) ) {
 					rc.x = rc.x - WIDTH;
 				}
@@ -155,7 +156,7 @@ namespace Hananoki.CustomHierarchy {
 					m.AddItem( SS._OpenInNewInspector, false, _uobj => EditorHelper.ShowNewInspector( _uobj.ToCast<UnityObject>() ), go );
 					m.AddItem( S._Moveuponelevel, false, _uobj => {
 						var gobj = _uobj as GameObject;
-						Undo.SetTransformParent( gobj.transform , gobj.transform.parent.parent , "");
+						Undo.SetTransformParent( gobj.transform, gobj.transform.parent.parent, "" );
 						EditorUtility.SetDirty( gobj );
 					}, go );
 #if LOCAL_TEST
@@ -180,13 +181,13 @@ namespace Hananoki.CustomHierarchy {
 			}
 			//else {
 			var tras = go.transform;
-				while( tras != null ) {
-					ra.x -= 14;
-					if( tras.parent != null ) {
-						GUI.DrawTexture( ra, s_styles.TreeLine );
-					}
-					tras = tras.parent;
+			while( tras != null ) {
+				ra.x -= 14;
+				if( tras.parent != null ) {
+					GUI.DrawTexture( ra, s_styles.TreeLine );
 				}
+				tras = tras.parent;
+			}
 			//}
 #endif
 
@@ -235,7 +236,7 @@ namespace Hananoki.CustomHierarchy {
 			var pos = selectionRect;
 			pos.x = 0;
 			pos.xMax = selectionRect.xMax;
-			
+
 			EditorGUI.DrawRect( pos, s_styles.lineColor );
 		}
 
@@ -361,5 +362,33 @@ namespace Hananoki.CustomHierarchy {
 		} // DrawAnimationMonitor
 #endif
 
+	}
+
+	public static class Icon {
+		static Dictionary<string, Texture2D> icons;
+		public static Texture2D Get( string s ) {
+			if( icons == null ) {
+				icons = new Dictionary<string, Texture2D>();
+			}
+			bool load = false;
+			if( !icons.ContainsKey( s ) ) load = true;
+			else if( icons[ s ] == null ) load = true;
+			if( load ) {
+				for( int i = 0; i < SharedEmbed.num; i++ ) {
+					if( SharedEmbed.n[ i ] != s ) continue;
+					var bb = B64.Decode( "iVBORw0KGgoAAAAN" + SharedEmbed.i[ i ] );
+					var t = new Texture2D( SharedEmbed.x[ i ], SharedEmbed.y[ i ] );
+					t.LoadImage( bb );
+					t.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+					if( icons.ContainsKey( s ) ) {
+						icons[ s ] = t;
+					}
+					else {
+						icons.Add( SharedEmbed.n[ i ], t );
+					}
+				}
+			}
+			return icons[ s ];
+		}
 	}
 }

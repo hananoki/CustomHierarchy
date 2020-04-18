@@ -1,5 +1,11 @@
 # CustomHierarchy
 
+## [0.5.3] - 2020-04-18
+- SharedModule v1.2.0 is supported
+
+### Changed
+- Adjusted the indentation of the setting
+
 ## [0.5.2] - 2020-04-04
 - SharedModule v1.1.0 is supported
 

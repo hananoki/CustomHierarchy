@@ -51,6 +51,7 @@ namespace Hananoki.CustomHierarchy {
 
 	public class SettingsEditorWindow : HSettingsEditorWindow {
 
+		static Vector2 scrollPos;
 
 		public static void Open() {
 			var window = GetWindow<SettingsEditorWindow>();
@@ -84,9 +85,9 @@ namespace Hananoki.CustomHierarchy {
 			}
 			*/
 
-			using( new PreferenceLayoutScope() ) {
+			using( new PreferenceLayoutScope(ref scrollPos ) ) {
 				E.i.Enable = HEditorGUILayout.ToggleLeft( SS._Enable, E.i.Enable );
-
+				EditorGUI.indentLevel++;
 				GUILayout.Space( 8f );
 
 				using( new EditorGUI.DisabledGroupScope( !E.i.Enable ) ) {
@@ -110,6 +111,7 @@ namespace Hananoki.CustomHierarchy {
 					E.i.showLayerAndTag = HEditorGUILayout.ToggleLeft( S._Displaytagnameandlayername, E.i.showLayerAndTag );
 					
 				}
+				EditorGUI.indentLevel--;
 			}
 
 			if( EditorGUI.EndChangeCheck() ) {
