@@ -1,8 +1,9 @@
-﻿#pragma warning disable 618
+﻿//#pragma warning disable 618
 
 using Hananoki.Extensions;
 using Hananoki.Reflection;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEditorInternal;
@@ -25,14 +26,13 @@ namespace Hananoki.CustomHierarchy {
 			public Texture2D MissingPrefabInstance => Icon.Get( "$MissingPrefabInstance" );
 			public Texture2D DisconnectedPrefab => Icon.Get( "$DisconnectedPrefab" );
 			public Texture2D DisconnectedModelPrefab => Icon.Get( "$DisconnectedModelPrefab" );
-			public GUIStyle ControlLabel;
-			public Color lineColor;
-#if LOCAL_TEST
 			public Texture2D TreeLine => Icon.Get( "CH_I" );
 			public Texture2D TreeLineB => Icon.Get( "CH_T" );
-#endif
+			public GUIStyle ControlLabel;
+			public Color lineColor;
+
 			public Styles() {
-				ControlLabel = "ControlLabel";
+				ControlLabel = new GUIStyle( "ControlLabel" );
 			}
 		}
 
@@ -42,7 +42,7 @@ namespace Hananoki.CustomHierarchy {
 		static CustomHierarchy() {
 			E.Load();
 			EditorApplication.hierarchyWindowItemOnGUI += HierarchyWindowItemCallback;
-			EditorSceneManager.sceneOpened += ( scene, mode ) => { Debug.Log( "sceneOpened" ); };
+			//EditorSceneManager.sceneOpened += ( scene, mode ) => { Debug.Log( "sceneOpened" ); };
 		}
 
 
@@ -58,6 +58,11 @@ namespace Hananoki.CustomHierarchy {
 			if( s_styles == null ) {
 				s_styles = new Styles();
 				s_styles.lineColor = E.i.lineColor;
+			}
+
+			if( UnitySymbol.Has( "UNITY_2019_1" ) ) {
+				selectionRect.x += 24;
+				selectionRect.width -= 24;
 			}
 
 			var go = EditorUtility.InstanceIDToObject( instanceID ) as GameObject;
@@ -99,6 +104,9 @@ namespace Hananoki.CustomHierarchy {
 
 
 			rc.x = max;
+			//#if LOCAL_DEBUG
+			rc.x -= E.i.offsetPosX;
+			//#endif
 			if( E.i.activeToggle ) {
 				rc.x = rc.x - WIDTH;
 				DrawActiveButtonGUI( go, rc );
@@ -144,8 +152,6 @@ namespace Hananoki.CustomHierarchy {
 			}
 
 
-
-
 			if( E.i.IconClickContext ) {
 				var r = selectionRect;
 				//r.x += 3;
@@ -172,24 +178,38 @@ namespace Hananoki.CustomHierarchy {
 				}
 			}
 
-#if LOCAL_TEST
-			var ra = selectionRect;
-			ra.width = 16;
-			ra.x -= 16;
-			if( go.transform.childCount == 0 ) {
-				GUI.DrawTexture( ra, s_styles.TreeLineB );
-			}
-			//else {
-			var tras = go.transform;
-			while( tras != null ) {
-				ra.x -= 14;
-				if( tras.parent != null ) {
-					GUI.DrawTexture( ra, s_styles.TreeLine );
+			if( E.i.enableTreeImg ) {
+				var ra = selectionRect;
+				ra.width = 16;
+				ra.x -= 16;
+				bool check( Transform trs ) {
+					if( trs.childCount == 0 ) return true;
+
+					int ii = go.transform.childCount;
+					for( int i = 0; i < go.transform.childCount; i++ ) {
+						if( 0 != ( trs.GetChild( i ).hideFlags & HideFlags.HideInHierarchy ) ) {
+							ii--;
+						}
+					}
+					return ii == 0 ? true : false;
 				}
-				tras = tras.parent;
+				if( check( go.transform ) ) {
+					GUI.DrawTexture( ra, s_styles.TreeLineB );
+				}
+				//for( int i = 0; i < go.transform.childCount; i++ ) {
+				//	go.transform.GetChild( i ).hideFlags = HideFlags.None;
+				//	Debug.Log( go.transform.GetChild( i ).name );
+				//}
+				var tras = go.transform;
+				while( tras != null ) {
+					ra.x -= 14;
+					if( tras.parent != null ) {
+						GUI.DrawTexture( ra, s_styles.TreeLine );
+					}
+					tras = tras.parent;
+				}
+				//EditorGUI.DrawRect( selectionRect ,new Color(0,0,1,0.25f));
 			}
-			//}
-#endif
 
 #if false
 			if( PreferenceSettings.i.EnableHierarchyItem ) {
@@ -272,14 +292,64 @@ namespace Hananoki.CustomHierarchy {
 			bool draw = true;
 			rc.x = rc.x - WIDTH;
 			rc.width = WIDTH;
+
+
+#if UNITY_2018_3_OR_NEWER
+			var status = PrefabUtility.GetPrefabInstanceStatus( go );
+			var type = PrefabUtility.GetPrefabAssetType( go );
+			switch( status ) {
+				case PrefabInstanceStatus.NotAPrefab:
+					break;
+				case PrefabInstanceStatus.Connected:
+					if( EditorHelper.HasMouseClick( rc, EventMouseButton.R ) ) {
+						var wnd = new UnityPrefabOverridesWindow( go );
+
+						var m = new GenericMenu();
+						if( !wnd.IsShowingActionButton() ) {
+							m.AddDisabledItem( "Apply All" );
+							m.AddDisabledItem( "Revert All" );
+						}
+						else {
+							m.AddItem( "Apply All", ( context ) => {
+								(var a, var b) = (System.ValueTuple<UnityPrefabOverridesWindow, GameObject>) context;
+								a.ApplyAll();
+							}, (wnd, go) );
+							m.AddItem( "Revert All", ( context ) => {
+								(var a, var b) = (System.ValueTuple<UnityPrefabOverridesWindow, GameObject>) context;
+								a.RevertAll();
+							}, (wnd, go) );
+						}
+						m.DropDown();
+						Event.current.Use();
+					}
+					var ico =type == PrefabAssetType.Model ? s_styles.PrefabModel : s_styles.PrefabNormal;
+					if( HEditorGUI.IconButton( rc, ico ) ) {
+						var aa = PrefabUtility.GetCorrespondingObjectFromSource( go );
+						if( aa != go ) {
+							EditorHelper.PingObject( aa );
+						}
+					}
+					break;
+				case PrefabInstanceStatus.Disconnected:
+					if( GUI.Button( rc, s_styles.DisconnectedPrefab, s_styles.ControlLabel ) ) {
+					}
+					break;
+				case PrefabInstanceStatus.MissingAsset:
+					if( GUI.Button( rc, s_styles.MissingPrefabInstance, s_styles.ControlLabel ) ) {
+					}
+					break;
+			}
+
+#else
 			var type = PrefabUtility.GetPrefabType( go );
 			if( type == PrefabType.PrefabInstance ) {
 				if( GUI.Button( rc, s_styles.PrefabNormal, s_styles.ControlLabel ) ) {
 					//Debug.Log( "PrefabType.PrefabInstance" );
-					var aa = PrefabUtility.GetPrefabParent( go );
-					var bb = AssetDatabase.GetAssetPath( aa );
-					Debug.Log( bb );
-					PrefabHelper.SavePrefab2( go, bb );
+					//var aa = PrefabUtility.GetPrefabParent( go );
+					//var bb = AssetDatabase.GetAssetPath( aa );
+					//Debug.Log( bb );
+					//PrefabHelper.SavePrefab2( go, bb );
+					EditorHelper.PingObject( go );
 				}
 				//GUI.DrawTexture( pos, EditorGUIUtility.FindTexture( "PrefabNormal Icon" ), ScaleMode.ScaleToFit, true );
 			}
@@ -306,6 +376,7 @@ namespace Hananoki.CustomHierarchy {
 			else {
 				draw = false;
 			}
+#endif
 			return draw;
 		}
 
@@ -361,8 +432,9 @@ namespace Hananoki.CustomHierarchy {
 
 		} // DrawAnimationMonitor
 #endif
-
 	}
+
+
 
 	public static class Icon {
 		static Dictionary<string, Texture2D> icons;

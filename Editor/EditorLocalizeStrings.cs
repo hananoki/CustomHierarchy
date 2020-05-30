@@ -14,5 +14,7 @@ namespace Hananoki.CustomHierarchy {
 		public static string _Moveuponelevel => L.Tr( "Move up one level" );
 		public static string _Pingascenefilebyclickingthesceneicon => L.Tr( "Ping a scene file by clicking the scene icon" );
 		public static string _Displaytagnameandlayername => L.Tr( "Display tag name and layer name" );
+		public static string _Displaythetree => L.Tr( "Display the tree" );
+		public static string _ItemdisplayoffsetX => L.Tr( "Item display offset X" );
 	}
 }

@@ -1,5 +1,19 @@
 # CustomHierarchy
 
+## [0.6.0] - 2020-05-31
+SharedModule v1.3.0 is required
+UnityReflection v1.0.7 is required
+
+### Added
+- Added Dotted line in the tree view
+- Added functionality to Prefab Icon clicks
+
+### Changed
+- Set "Auto Referenced" of asmdef to false
+
+### Fixed
+- Cleared debugging log when opening a scene
+
 ## [0.5.3] - 2020-04-18
 - SharedModule v1.2.0 is supported
 

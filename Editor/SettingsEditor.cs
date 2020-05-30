@@ -14,15 +14,18 @@ namespace Hananoki.CustomHierarchy {
 
 		public bool activeToggle = true;
 		public bool prefabStatus = true;
-		
+		public bool enableTreeImg = true;
+
 		public bool enableLineColor = true;
-		public Color lineColorPersonal= new Color( 0, 0, 0, 0.05f );
+		public Color lineColorPersonal = new Color( 0, 0, 0, 0.05f );
 		public Color lineColorProfessional = new Color( 1, 1, 1, 0.05f );
 
 		public bool IconClickContext;
 		public bool SceneIconClickPing;
 		public bool showLayerAndTag;
-
+//#if LOCAL_DEBUG
+		public float offsetPosX;
+//#endif
 		public static E i;
 
 		public Color lineColor {
@@ -85,13 +88,14 @@ namespace Hananoki.CustomHierarchy {
 			}
 			*/
 
-			using( new PreferenceLayoutScope(ref scrollPos ) ) {
+			using( new PreferenceLayoutScope( ref scrollPos ) ) {
 				E.i.Enable = HEditorGUILayout.ToggleLeft( SS._Enable, E.i.Enable );
 				EditorGUI.indentLevel++;
 				GUILayout.Space( 8f );
 
 				using( new EditorGUI.DisabledGroupScope( !E.i.Enable ) ) {
 
+					E.i.enableTreeImg = HEditorGUILayout.ToggleLeft( S._Displaythetree, E.i.enableTreeImg );
 					E.i.activeToggle = HEditorGUILayout.ToggleLeft( S._Showtoggletotogglegameobjectactive, E.i.activeToggle );
 					E.i.prefabStatus = HEditorGUILayout.ToggleLeft( S._Displayprefabstatuswithicons, E.i.prefabStatus );
 					//Settings.i.HierarchyAnim = EditorGUILayout.ToggleLeft( "Monitor for Animation Curve", Settings.i.HierarchyAnim, GUILayout.ExpandWidth( false ) );
@@ -103,13 +107,16 @@ namespace Hananoki.CustomHierarchy {
 						E.i.lineColor = EditorGUILayout.ColorField( SS._Rowcolor, E.i.lineColor );
 						EditorGUI.indentLevel--;
 					}
+//#if LOCAL_DEBUG
+					E.i.offsetPosX = EditorGUILayout.FloatField( S._ItemdisplayoffsetX, E.i.offsetPosX );
+//#endif
 
 					GUILayout.Space( 8f );
 					EditorGUILayout.LabelField( $"* {SS._Experimental}", EditorStyles.boldLabel );
 					E.i.IconClickContext = HEditorGUILayout.ToggleLeft( SS._ContextMenuWithIconClick, E.i.IconClickContext );
 					E.i.SceneIconClickPing = HEditorGUILayout.ToggleLeft( S._Pingascenefilebyclickingthesceneicon, E.i.SceneIconClickPing );
 					E.i.showLayerAndTag = HEditorGUILayout.ToggleLeft( S._Displaytagnameandlayername, E.i.showLayerAndTag );
-					
+
 				}
 				EditorGUI.indentLevel--;
 			}

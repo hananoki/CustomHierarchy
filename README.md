@@ -15,12 +15,14 @@
 "dependencies": {
   "com.hananoki.custom-hierarchy": "https://github.com/hananoki/CustomHierarchy.git",
   "com.hananoki.shared-module": "https://github.com/hananoki/SharedModule.git",
+  "com.hananoki.unity-reflection": "https://github.com/hananoki/UnityReflection.git",
   ...
 }
 ```
 
 ## Requirement
-![](https://img.shields.io/badge/SharedModule-v1.2.0%20or%20later-blue.svg)
+![](https://img.shields.io/badge/SharedModule-v1.3.0%20or%20later-blue.svg)
+![](https://img.shields.io/badge/UnityReflection-v1.0.7%20or%20later-blue.svg)
 
 ## Licence
 [MIT](https://github.com/hananoki/CustomHierarchy/blob/master/LICENSE.md)
