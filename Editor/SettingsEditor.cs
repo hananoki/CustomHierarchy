@@ -3,6 +3,7 @@
 using UnityEditor;
 using UnityEngine;
 using Hananoki.Extensions;
+using Hananoki.SharedModule;
 
 using E = Hananoki.CustomHierarchy.SettingsEditor;
 using SS = Hananoki.SharedModule.S;
@@ -23,9 +24,9 @@ namespace Hananoki.CustomHierarchy {
 		public bool IconClickContext;
 		public bool SceneIconClickPing;
 		public bool showLayerAndTag;
-//#if LOCAL_DEBUG
+		//#if LOCAL_DEBUG
 		public float offsetPosX;
-//#endif
+		//#endif
 		public static E i;
 
 		public Color lineColor {
@@ -53,26 +54,21 @@ namespace Hananoki.CustomHierarchy {
 
 
 	public class SettingsEditorWindow : HSettingsEditorWindow {
-
-		static Vector2 scrollPos;
-
+			
 		public static void Open() {
-			var window = GetWindow<SettingsEditorWindow>();
-			window.SetTitle( new GUIContent( Package.name, Icon.Get( "SettingsIcon" ) ) );
+			var w = GetWindow<SettingsEditorWindow>();
+			w.SetTitle( new GUIContent( "Project Settings", EditorIcon.settings ) );
+			w.headerMame = Package.name;
+			w.headerVersion = Package.version;
+			w.gui = DrawGUI;
 		}
-
-		void OnEnable() {
-			drawGUI = DrawGUI;
-			E.Load();
-		}
-
 
 
 		/// <summary>
 		/// 
 		/// </summary>
-		static void DrawGUI() {
-
+		public static void DrawGUI() {
+			E.Load();
 			EditorGUI.BeginChangeCheck();
 
 			/* アイコン消しテスト、コンテキストメニューと競合する
@@ -88,38 +84,38 @@ namespace Hananoki.CustomHierarchy {
 			}
 			*/
 
-			using( new PreferenceLayoutScope( ref scrollPos ) ) {
-				E.i.Enable = HEditorGUILayout.ToggleLeft( SS._Enable, E.i.Enable );
-				EditorGUI.indentLevel++;
-				GUILayout.Space( 8f );
 
-				using( new EditorGUI.DisabledGroupScope( !E.i.Enable ) ) {
+			E.i.Enable = HEditorGUILayout.ToggleLeft( SS._Enable, E.i.Enable );
+			EditorGUI.indentLevel++;
+			GUILayout.Space( 8f );
 
-					E.i.enableTreeImg = HEditorGUILayout.ToggleLeft( S._Displaythetree, E.i.enableTreeImg );
-					E.i.activeToggle = HEditorGUILayout.ToggleLeft( S._Showtoggletotogglegameobjectactive, E.i.activeToggle );
-					E.i.prefabStatus = HEditorGUILayout.ToggleLeft( S._Displayprefabstatuswithicons, E.i.prefabStatus );
-					//Settings.i.HierarchyAnim = EditorGUILayout.ToggleLeft( "Monitor for Animation Curve", Settings.i.HierarchyAnim, GUILayout.ExpandWidth( false ) );
+			using( new EditorGUI.DisabledGroupScope( !E.i.Enable ) ) {
 
-					E.i.enableLineColor = HEditorGUILayout.ToggleLeft( SS._Changecolorforeachrow, E.i.enableLineColor );
+				E.i.enableTreeImg = HEditorGUILayout.ToggleLeft( S._Displaythetree, E.i.enableTreeImg );
+				E.i.activeToggle = HEditorGUILayout.ToggleLeft( S._Showtoggletotogglegameobjectactive, E.i.activeToggle );
+				E.i.prefabStatus = HEditorGUILayout.ToggleLeft( S._Displayprefabstatuswithicons, E.i.prefabStatus );
+				//Settings.i.HierarchyAnim = EditorGUILayout.ToggleLeft( "Monitor for Animation Curve", Settings.i.HierarchyAnim, GUILayout.ExpandWidth( false ) );
 
-					using( new EditorGUI.DisabledGroupScope( !E.i.enableLineColor ) ) {
-						EditorGUI.indentLevel++;
-						E.i.lineColor = EditorGUILayout.ColorField( SS._Rowcolor, E.i.lineColor );
-						EditorGUI.indentLevel--;
-					}
-//#if LOCAL_DEBUG
-					E.i.offsetPosX = EditorGUILayout.FloatField( S._ItemdisplayoffsetX, E.i.offsetPosX );
-//#endif
+				E.i.enableLineColor = HEditorGUILayout.ToggleLeft( SS._Changecolorforeachrow, E.i.enableLineColor );
 
-					GUILayout.Space( 8f );
-					EditorGUILayout.LabelField( $"* {SS._Experimental}", EditorStyles.boldLabel );
-					E.i.IconClickContext = HEditorGUILayout.ToggleLeft( SS._ContextMenuWithIconClick, E.i.IconClickContext );
-					E.i.SceneIconClickPing = HEditorGUILayout.ToggleLeft( S._Pingascenefilebyclickingthesceneicon, E.i.SceneIconClickPing );
-					E.i.showLayerAndTag = HEditorGUILayout.ToggleLeft( S._Displaytagnameandlayername, E.i.showLayerAndTag );
-
+				using( new EditorGUI.DisabledGroupScope( !E.i.enableLineColor ) ) {
+					EditorGUI.indentLevel++;
+					E.i.lineColor = EditorGUILayout.ColorField( SS._Rowcolor, E.i.lineColor );
+					EditorGUI.indentLevel--;
 				}
-				EditorGUI.indentLevel--;
+				//#if LOCAL_DEBUG
+				E.i.offsetPosX = EditorGUILayout.FloatField( S._ItemdisplayoffsetX, E.i.offsetPosX );
+				//#endif
+
+				GUILayout.Space( 8f );
+				EditorGUILayout.LabelField( $"* {SS._Experimental}", EditorStyles.boldLabel );
+				E.i.IconClickContext = HEditorGUILayout.ToggleLeft( SS._ContextMenuWithIconClick, E.i.IconClickContext );
+				E.i.SceneIconClickPing = HEditorGUILayout.ToggleLeft( S._Pingascenefilebyclickingthesceneicon, E.i.SceneIconClickPing );
+				E.i.showLayerAndTag = HEditorGUILayout.ToggleLeft( S._Displaytagnameandlayername, E.i.showLayerAndTag );
+
 			}
+			EditorGUI.indentLevel--;
+
 
 			if( EditorGUI.EndChangeCheck() ) {
 				E.Save();
@@ -136,17 +132,15 @@ namespace Hananoki.CustomHierarchy {
 
 
 
-
+#if !ENABLE_HANANOKI_SETTINGS
 #if UNITY_2018_3_OR_NEWER && !ENABLE_LEGACY_PREFERENCE
-		static void titleBarGuiHandler() {
-			GUILayout.Label( $"{Package.version}", EditorStyles.miniLabel );
-		}
+		
 		[SettingsProvider]
 		public static SettingsProvider PreferenceView() {
 			var provider = new SettingsProvider( $"Preferences/Hananoki/{Package.name}", SettingsScope.User ) {
 				label = $"{Package.name}",
 				guiHandler = PreferencesGUI,
-				titleBarGuiHandler = titleBarGuiHandler,
+				titleBarGuiHandler = () => GUILayout.Label( $"{Package.version}", EditorStyles.miniLabel ),
 			};
 			return provider;
 		}
@@ -155,8 +149,25 @@ namespace Hananoki.CustomHierarchy {
 		[PreferenceItem( Package.name )]
 		public static void PreferencesGUI() {
 #endif
-			E.Load();
-			DrawGUI();
+			using( new LayoutScope() ) DrawGUI();
+		}
+#endif
+	}
+
+
+
+#if ENABLE_HANANOKI_SETTINGS
+	[SettingsClass]
+	public class SettingsEvent {
+		[SettingsMethod]
+		public static SettingsItem RegisterSettings() {
+			return new SettingsItem() {
+				//mode = 1,
+				displayName = Package.name,
+				version = Package.version,
+				gui = SettingsEditorWindow.DrawGUI,
+			};
 		}
 	}
+#endif
 }

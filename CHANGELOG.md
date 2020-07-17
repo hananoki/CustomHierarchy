@@ -1,5 +1,12 @@
 # CustomHierarchy
 
+## [0.6.1] - 2020-07-16
+- SharedModule v1.5.0 is supported
+
+### Changed
+- Support for the new setting
+- The Localize folder has been moved
+
 ## [0.6.0] - 2020-05-31
 SharedModule v1.3.0 is required
 UnityReflection v1.0.7 is required

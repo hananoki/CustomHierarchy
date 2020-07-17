@@ -1,4 +1,4 @@
-﻿//#pragma warning disable 618
+﻿#pragma warning disable 618
 
 using Hananoki.Extensions;
 using Hananoki.Reflection;
@@ -58,6 +58,16 @@ namespace Hananoki.CustomHierarchy {
 			if( s_styles == null ) {
 				s_styles = new Styles();
 				s_styles.lineColor = E.i.lineColor;
+
+				if( UnitySymbol.Has( "UNITY_2019_3_OR_NEWER" ) ) {
+					object wnd = EditorUtils.SceneHierarchyWindow();
+					var _sceneHierarchy = wnd.GetProperty<object>( "sceneHierarchy" );
+					var _treeView = _sceneHierarchy.GetProperty<object>( "treeView" );
+					var _gui = _treeView.GetProperty<object>( "gui" );
+					//var _selectionStyle = _gui.GetProperty<object>( "selectionStyle" );
+
+					_gui.SetProperty( "selectionStyle", new GUIStyle( "FrameBox" ) );
+				}
 			}
 
 			if( UnitySymbol.Has( "UNITY_2019_1" ) ) {
@@ -293,90 +303,104 @@ namespace Hananoki.CustomHierarchy {
 			rc.x = rc.x - WIDTH;
 			rc.width = WIDTH;
 
+			//	NotAPrefab = 0,
+			//Connected = 1,
+			//Disconnected = 2,
+			//MissingAsset = 3
 
-#if UNITY_2018_3_OR_NEWER
-			var status = PrefabUtility.GetPrefabInstanceStatus( go );
-			var type = PrefabUtility.GetPrefabAssetType( go );
-			switch( status ) {
-				case PrefabInstanceStatus.NotAPrefab:
-					break;
-				case PrefabInstanceStatus.Connected:
-					if( EditorHelper.HasMouseClick( rc, EventMouseButton.R ) ) {
-						var wnd = new UnityPrefabOverridesWindow( go );
+			//public enum PrefabAssetType {
+			//NotAPrefab = 0,
+			//Regular = 1,
+			//Model = 2,
+			//Variant = 3,
+			//MissingAsset = 4
+			if( UnitySymbol.Has( "UNITY_2018_3_OR_NEWER" ) ) {
+				var t = typeof( PrefabUtility );
+				var status = t.MethodInvoke<int>( "GetPrefabInstanceStatus", new object[] { go } );
+				var type = t.MethodInvoke<int>( "GetPrefabAssetType", new object[] { go } );
+				//var status = PrefabUtility.GetPrefabInstanceStatus( go );
+				//var type = PrefabUtility.GetPrefabAssetType( go );
+				switch( status ) {
+					case 0:// PrefabInstanceStatus.NotAPrefab:
+						break;
+					case 1:// PrefabInstanceStatus.Connected:
+						if( EditorHelper.HasMouseClick( rc, EventMouseButton.R ) ) {
+							var wnd = new UnityPrefabOverridesWindow( go );
 
-						var m = new GenericMenu();
-						if( !wnd.IsShowingActionButton() ) {
-							m.AddDisabledItem( "Apply All" );
-							m.AddDisabledItem( "Revert All" );
+							var m = new GenericMenu();
+							if( !wnd.IsShowingActionButton() ) {
+								m.AddDisabledItem( "Apply All" );
+								m.AddDisabledItem( "Revert All" );
+							}
+							else {
+								//m.AddItem( "Apply All", ( context ) => {
+								//	(var a, var b) = (System.ValueTuple<UnityPrefabOverridesWindow, GameObject>) context;
+								//	a.ApplyAll();
+								//}, (wnd, go) );
+								//m.AddItem( "Revert All", ( context ) => {
+								//	(var a, var b) = (System.ValueTuple<UnityPrefabOverridesWindow, GameObject>) context;
+								//	a.RevertAll();
+								//}, (wnd, go) );
+							}
+							m.DropDown();
+							Event.current.Use();
 						}
-						else {
-							m.AddItem( "Apply All", ( context ) => {
-								(var a, var b) = (System.ValueTuple<UnityPrefabOverridesWindow, GameObject>) context;
-								a.ApplyAll();
-							}, (wnd, go) );
-							m.AddItem( "Revert All", ( context ) => {
-								(var a, var b) = (System.ValueTuple<UnityPrefabOverridesWindow, GameObject>) context;
-								a.RevertAll();
-							}, (wnd, go) );
+						var ico = type == 2 ? s_styles.PrefabModel : s_styles.PrefabNormal;
+						if( HEditorGUI.IconButton( rc, ico ) ) {
+							//var aa = PrefabUtility.GetCorrespondingObjectFromSource( go );
+							var aa = t.MethodInvoke<GameObject>( "GetCorrespondingObjectFromSource", new object[] { go } );
+							if( aa != go ) {
+								EditorHelper.PingObject( aa );
+							}
 						}
-						m.DropDown();
-						Event.current.Use();
-					}
-					var ico =type == PrefabAssetType.Model ? s_styles.PrefabModel : s_styles.PrefabNormal;
-					if( HEditorGUI.IconButton( rc, ico ) ) {
-						var aa = PrefabUtility.GetCorrespondingObjectFromSource( go );
-						if( aa != go ) {
-							EditorHelper.PingObject( aa );
+						break;
+					case 2:// PrefabInstanceStatus.Disconnected:
+						if( GUI.Button( rc, s_styles.DisconnectedPrefab, s_styles.ControlLabel ) ) {
 						}
-					}
-					break;
-				case PrefabInstanceStatus.Disconnected:
-					if( GUI.Button( rc, s_styles.DisconnectedPrefab, s_styles.ControlLabel ) ) {
-					}
-					break;
-				case PrefabInstanceStatus.MissingAsset:
-					if( GUI.Button( rc, s_styles.MissingPrefabInstance, s_styles.ControlLabel ) ) {
-					}
-					break;
-			}
-
-#else
-			var type = PrefabUtility.GetPrefabType( go );
-			if( type == PrefabType.PrefabInstance ) {
-				if( GUI.Button( rc, s_styles.PrefabNormal, s_styles.ControlLabel ) ) {
-					//Debug.Log( "PrefabType.PrefabInstance" );
-					//var aa = PrefabUtility.GetPrefabParent( go );
-					//var bb = AssetDatabase.GetAssetPath( aa );
-					//Debug.Log( bb );
-					//PrefabHelper.SavePrefab2( go, bb );
-					EditorHelper.PingObject( go );
-				}
-				//GUI.DrawTexture( pos, EditorGUIUtility.FindTexture( "PrefabNormal Icon" ), ScaleMode.ScaleToFit, true );
-			}
-			else if( type == PrefabType.ModelPrefabInstance ) {
-				if( GUI.Button( rc, s_styles.PrefabModel, s_styles.ControlLabel ) ) {
-					//Debug.Log( "PrefabType.ModelPrefabInstance" );
-				}
-			}
-			else if( type == PrefabType.DisconnectedPrefabInstance ) {
-				if( GUI.Button( rc, s_styles.DisconnectedPrefab, s_styles.ControlLabel ) ) {
-					//Debug.Log( "PrefabType.DisconnectedPrefabInstance" );
-				}
-			}
-			else if( type == PrefabType.DisconnectedModelPrefabInstance ) {
-				if( GUI.Button( rc, s_styles.DisconnectedModelPrefab, s_styles.ControlLabel ) ) {
-					//Debug.Log( "PrefabType.DisconnectedModelPrefabInstance" );
-				}
-			}
-			else if( type == PrefabType.MissingPrefabInstance ) {
-				if( GUI.Button( rc, s_styles.MissingPrefabInstance, s_styles.ControlLabel ) ) {
-					//Debug.Log( "PrefabType.MissingPrefabInstance" );
+						break;
+					case 3:// PrefabInstanceStatus.MissingAsset:
+						if( GUI.Button( rc, s_styles.MissingPrefabInstance, s_styles.ControlLabel ) ) {
+						}
+						break;
 				}
 			}
 			else {
-				draw = false;
+				var type = PrefabUtility.GetPrefabType( go );
+				if( type == PrefabType.PrefabInstance ) {
+					if( GUI.Button( rc, s_styles.PrefabNormal, s_styles.ControlLabel ) ) {
+						//Debug.Log( "PrefabType.PrefabInstance" );
+						//var aa = PrefabUtility.GetPrefabParent( go );
+						//var bb = AssetDatabase.GetAssetPath( aa );
+						//Debug.Log( bb );
+						//PrefabHelper.SavePrefab2( go, bb );
+						EditorHelper.PingObject( go );
+					}
+					//GUI.DrawTexture( pos, EditorGUIUtility.FindTexture( "PrefabNormal Icon" ), ScaleMode.ScaleToFit, true );
+				}
+				else if( type == PrefabType.ModelPrefabInstance ) {
+					if( GUI.Button( rc, s_styles.PrefabModel, s_styles.ControlLabel ) ) {
+						//Debug.Log( "PrefabType.ModelPrefabInstance" );
+					}
+				}
+				else if( type == PrefabType.DisconnectedPrefabInstance ) {
+					if( GUI.Button( rc, s_styles.DisconnectedPrefab, s_styles.ControlLabel ) ) {
+						//Debug.Log( "PrefabType.DisconnectedPrefabInstance" );
+					}
+				}
+				else if( type == PrefabType.DisconnectedModelPrefabInstance ) {
+					if( GUI.Button( rc, s_styles.DisconnectedModelPrefab, s_styles.ControlLabel ) ) {
+						//Debug.Log( "PrefabType.DisconnectedModelPrefabInstance" );
+					}
+				}
+				else if( type == PrefabType.MissingPrefabInstance ) {
+					if( GUI.Button( rc, s_styles.MissingPrefabInstance, s_styles.ControlLabel ) ) {
+						//Debug.Log( "PrefabType.MissingPrefabInstance" );
+					}
+				}
+				else {
+					draw = false;
+				}
 			}
-#endif
 			return draw;
 		}
 
