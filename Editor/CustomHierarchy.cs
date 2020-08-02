@@ -1,5 +1,7 @@
 ﻿#pragma warning disable 618
 
+//#define TEST
+
 using Hananoki.Extensions;
 using Hananoki.Reflection;
 using System.Collections.Generic;
@@ -58,7 +60,7 @@ namespace Hananoki.CustomHierarchy {
 			if( s_styles == null ) {
 				s_styles = new Styles();
 				s_styles.lineColor = E.i.lineColor;
-
+#if TEST
 				if( UnitySymbol.Has( "UNITY_2019_3_OR_NEWER" ) ) {
 					object wnd = EditorUtils.SceneHierarchyWindow();
 					var _sceneHierarchy = wnd.GetProperty<object>( "sceneHierarchy" );
@@ -68,8 +70,8 @@ namespace Hananoki.CustomHierarchy {
 
 					_gui.SetProperty( "selectionStyle", new GUIStyle( "FrameBox" ) );
 				}
+#endif
 			}
-
 			if( UnitySymbol.Has( "UNITY_2019_1" ) ) {
 				selectionRect.x += 24;
 				selectionRect.width -= 24;
@@ -169,7 +171,7 @@ namespace Hananoki.CustomHierarchy {
 				//EditorGUI.DrawRect( r, new Color( 0, 0, 1, 0.5f ) );
 				if( EditorHelper.HasMouseClick( r ) ) {
 					var m = new GenericMenu();
-					m.AddItem( SS._OpenInNewInspector, false, _uobj => EditorHelper.ShowNewInspector( _uobj.ToCast<UnityObject>() ), go );
+					m.AddItem( SS._OpenInNewInspector, false, _uobj => EditorHelper.ShowNewInspectorWindow( _uobj.ToCast<UnityObject>() ), go );
 					m.AddItem( S._Moveuponelevel, false, _uobj => {
 						var gobj = _uobj as GameObject;
 						Undo.SetTransformParent( gobj.transform, gobj.transform.parent.parent, "" );

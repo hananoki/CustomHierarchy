@@ -1,5 +1,13 @@
 # CustomHierarchy
 
+## [0.6.2] - 2020-08-02
+
+### Changed
+- Changed dependencies in package.json
+
+### Fixed
+- Removed the treeview test code
+
 ## [0.6.1] - 2020-07-16
 - SharedModule v1.5.0 is supported
 

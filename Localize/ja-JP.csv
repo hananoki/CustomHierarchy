@@ -1,6 +1,4 @@
-
-# CustomHierarchy
-Show toggle to toggle game object active	ゲームオブジェクトのアクティブを切り替えるトグルを表示する
+﻿Show toggle to toggle game object active	ゲームオブジェクトのアクティブを切り替えるトグルを表示する
 Display prefab status with icons	プレハブの状態をアイコンで表示する
 Move up one level	上の階層に移動する
 Ping a scene file by clicking the scene icon	シーンアイコンクリックでシーンファイルをPingする

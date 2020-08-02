@@ -1,14 +1,12 @@
 {
   "name": "com.hananoki.custom-hierarchy",
   "displayName": "CustomHierarchy",
-  "version": "0.6.1-preview",
+  "version": "0.6.2-preview",
   "unity": "2018.3",
   "description": "A simple customized hierarchy",
   "keywords": [
     "Editor"
   ],
   "category": "Editor Extentions",
-  "dependencies": {
-    "com.hananoki.shared-module": "https://github.com/hananoki/SharedModule.git"
-  }
+  "dependencies": {}
 }
