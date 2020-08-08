@@ -27,6 +27,8 @@ namespace Hananoki.CustomHierarchy {
 		//#if LOCAL_DEBUG
 		public float offsetPosX;
 		//#endif
+		public bool toolbarOverride;
+
 		public static E i;
 
 		public Color lineColor {
@@ -89,6 +91,7 @@ namespace Hananoki.CustomHierarchy {
 			EditorGUI.indentLevel++;
 			GUILayout.Space( 8f );
 
+			bool _toolbarOverride;
 			using( new EditorGUI.DisabledGroupScope( !E.i.Enable ) ) {
 
 				E.i.enableTreeImg = HEditorGUILayout.ToggleLeft( S._Displaythetree, E.i.enableTreeImg );
@@ -113,6 +116,7 @@ namespace Hananoki.CustomHierarchy {
 				E.i.SceneIconClickPing = HEditorGUILayout.ToggleLeft( S._Pingascenefilebyclickingthesceneicon, E.i.SceneIconClickPing );
 				E.i.showLayerAndTag = HEditorGUILayout.ToggleLeft( S._Displaytagnameandlayername, E.i.showLayerAndTag );
 
+				_toolbarOverride = HEditorGUILayout.ToggleLeft( "Toolbar Override (UNITY_2019_3_OR_NEWER)", E.i.toolbarOverride );
 			}
 			EditorGUI.indentLevel--;
 
@@ -122,6 +126,18 @@ namespace Hananoki.CustomHierarchy {
 				if( CustomHierarchy.s_styles != null ) {
 					CustomHierarchy.s_styles.lineColor = E.i.lineColor;
 				}
+				
+				if( E.i.toolbarOverride != _toolbarOverride ) {
+					CustomHierarchy._window = HEditorWindow.Find( UnityTypes.SceneHierarchyWindow );
+					E.i.toolbarOverride = _toolbarOverride;
+					if( E.i.toolbarOverride ) {
+						CustomHierarchy._window?.AddIMGUIContainer( CustomHierarchy._IMGUIContainer, true );
+					}
+					else {
+						CustomHierarchy._window?.RemoveIMGUIContainer( CustomHierarchy._IMGUIContainer, true );
+					}
+				}
+
 				EditorApplication.RepaintHierarchyWindow();
 			}
 

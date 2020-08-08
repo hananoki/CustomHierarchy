@@ -1,5 +1,14 @@
 # CustomHierarchy
 
+## [0.6.3] - 2020-08-08
+
+### Required
+- SharedModule v1.5.4 or later
+  - Window shortcut
+
+### Added
+- Function addition test in tab field
+
 ## [0.6.2] - 2020-08-02
 
 ### Changed

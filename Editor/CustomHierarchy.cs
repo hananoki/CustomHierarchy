@@ -4,8 +4,8 @@
 
 using Hananoki.Extensions;
 using Hananoki.Reflection;
+using System;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEditorInternal;
@@ -21,6 +21,9 @@ namespace Hananoki.CustomHierarchy {
 	public static class CustomHierarchy {
 
 		const int WIDTH = 16;
+
+		internal static EditorWindow _window;
+		internal static object _IMGUIContainer;
 
 		public class Styles {
 			public Texture2D PrefabNormal => Icon.Get( "$PrefabNormal" );
@@ -47,6 +50,30 @@ namespace Hananoki.CustomHierarchy {
 			//EditorSceneManager.sceneOpened += ( scene, mode ) => { Debug.Log( "sceneOpened" ); };
 		}
 
+		static void OnDrawDockPane() {
+			HGUIScope.Horizontal( __ );
+			void __() {
+				GUILayout.Space( 120 );
+
+				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_animationwindow ) ) {
+					HEditorWindow.ShowAnimationWindow();
+				}
+				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_graphs_animatorcontrollertool ) ) {
+					HEditorWindow.ShowAnimatorControllerTool();
+				}
+
+				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_timeline_timelinewindow ) ) {
+					HEditorWindow.ShowTimelineWindow();
+				}
+				GUILayout.Space( 8 );
+				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_consolewindow ) ) {
+					HEditorWindow.ShowConsoleWindow();
+				}
+				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_profilerwindow ) ) {
+					HEditorWindow.ShowProfilerWindow();
+				}
+			}
+		}
 
 		/// <summary>
 		/// 
@@ -72,6 +99,40 @@ namespace Hananoki.CustomHierarchy {
 				}
 #endif
 			}
+
+			if( _IMGUIContainer == null ) {
+				_IMGUIContainer = Activator.CreateInstance( UnityTypes.IMGUIContainer, new object[] { (Action) OnDrawDockPane } );
+				if( E.i.toolbarOverride ) {
+					_window = HEditorWindow.Find( UnityTypes.SceneHierarchyWindow );
+					_window?.AddIMGUIContainer( OnDrawDockPane, true );
+				}
+					
+
+				//obj.AddIMGUIContainer( _2 );
+				//void _2() {
+				//	HGUIScope.Horizontal( __ );
+				//	void __() {
+				//		GUILayout.Space( 36 );
+				//		if( HGUILayoutToolbar.Button( "1", GUILayout.ExpandWidth( false ) ) ) {
+				//			var m = new GenericMenu();
+				//			m.AddDisabledItem( "描画できるようになった" );
+				//			m.DropDownLastRect();
+				//		}
+				//		//void _action() {
+				//		//	var m = new GenericMenu();
+				//		//	m.AddDisabledItem( "aaaa" );
+				//		//	m.DropDownLastRect();
+				//		//}
+				//		if(HGUILayoutToolbar.Button( "2", GUILayout.ExpandWidth( false ) )){
+				//			var m = new GenericMenu();
+				//			m.AddDisabledItem( "やったぜ" );
+				//			m.DropDownLastRect();
+				//		}
+				//	}
+				//}
+			}
+
+
 			if( UnitySymbol.Has( "UNITY_2019_1" ) ) {
 				selectionRect.x += 24;
 				selectionRect.width -= 24;
