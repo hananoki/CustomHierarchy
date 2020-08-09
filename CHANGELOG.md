@@ -1,13 +1,24 @@
 # CustomHierarchy
 
+## [0.6.4] - 2020-08-09
+
+### Required
+- SharedModule v1.5.5 or later
+
+### Changed
+- Switched to ShowWindow
+
+### Fixed
+- Fixed a bug that settings are not saved
+
 ## [0.6.3] - 2020-08-08
 
 ### Required
 - SharedModule v1.5.4 or later
-  - Window shortcut
 
 ### Added
 - Function addition test in tab field
+  - Window shortcut
 
 ## [0.6.2] - 2020-08-02
 

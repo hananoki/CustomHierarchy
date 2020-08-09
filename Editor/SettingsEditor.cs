@@ -122,7 +122,7 @@ namespace Hananoki.CustomHierarchy {
 
 
 			if( EditorGUI.EndChangeCheck() ) {
-				E.Save();
+				
 				if( CustomHierarchy.s_styles != null ) {
 					CustomHierarchy.s_styles.lineColor = E.i.lineColor;
 				}
@@ -137,7 +137,7 @@ namespace Hananoki.CustomHierarchy {
 						CustomHierarchy._window?.RemoveIMGUIContainer( CustomHierarchy._IMGUIContainer, true );
 					}
 				}
-
+				E.Save();
 				EditorApplication.RepaintHierarchyWindow();
 			}
 

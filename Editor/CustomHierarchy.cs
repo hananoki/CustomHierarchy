@@ -56,21 +56,21 @@ namespace Hananoki.CustomHierarchy {
 				GUILayout.Space( 120 );
 
 				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_animationwindow ) ) {
-					HEditorWindow.ShowAnimationWindow();
+					HEditorWindow.ShowWindow( UnityTypes.AnimationWindow );
 				}
 				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_graphs_animatorcontrollertool ) ) {
-					HEditorWindow.ShowAnimatorControllerTool();
+					HEditorWindow.ShowWindow( UnityTypes.AnimatorControllerTool );
 				}
 
 				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_timeline_timelinewindow ) ) {
-					HEditorWindow.ShowTimelineWindow();
+					HEditorWindow.ShowWindow( UnityTypes.TimelineWindow );
 				}
 				GUILayout.Space( 8 );
 				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_consolewindow ) ) {
-					HEditorWindow.ShowConsoleWindow();
+					HEditorWindow.ShowWindow( UnityTypes.ConsoleWindow );
 				}
 				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_profilerwindow ) ) {
-					HEditorWindow.ShowProfilerWindow();
+					HEditorWindow.ShowWindow( UnityTypes.ProfilerWindow );
 				}
 			}
 		}
@@ -106,7 +106,7 @@ namespace Hananoki.CustomHierarchy {
 					_window = HEditorWindow.Find( UnityTypes.SceneHierarchyWindow );
 					_window?.AddIMGUIContainer( OnDrawDockPane, true );
 				}
-					
+
 
 				//obj.AddIMGUIContainer( _2 );
 				//void _2() {
