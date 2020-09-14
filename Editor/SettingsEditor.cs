@@ -24,10 +24,11 @@ namespace Hananoki.CustomHierarchy {
 		public bool IconClickContext;
 		public bool SceneIconClickPing;
 		public bool showLayerAndTag;
-		//#if LOCAL_DEBUG
+		
 		public float offsetPosX;
-		//#endif
+		
 		public bool toolbarOverride;
+		public bool numpadCtrl;
 
 		public static E i;
 
@@ -117,6 +118,7 @@ namespace Hananoki.CustomHierarchy {
 				E.i.showLayerAndTag = HEditorGUILayout.ToggleLeft( S._Displaytagnameandlayername, E.i.showLayerAndTag );
 
 				_toolbarOverride = HEditorGUILayout.ToggleLeft( "Toolbar Override (UNITY_2019_3_OR_NEWER)", E.i.toolbarOverride );
+				E.i.numpadCtrl = HEditorGUILayout.ToggleLeft( S._NumpadControl, E.i.numpadCtrl );
 			}
 			EditorGUI.indentLevel--;
 

@@ -16,5 +16,6 @@ namespace Hananoki.CustomHierarchy {
 		public static string _Displaytagnameandlayername => L.Tr( "Display tag name and layer name" );
 		public static string _Displaythetree => L.Tr( "Display the tree" );
 		public static string _ItemdisplayoffsetX => L.Tr( "Item display offset X" );
+		public static string _NumpadControl => L.Tr( "Numpad Control" );
 	}
 }

@@ -1,5 +1,10 @@
 # CustomHierarchy
 
+## [0.6.5] - 2020-09-14
+
+### Added
+- Added Numpad Control
+
 ## [0.6.4] - 2020-08-09
 
 ### Required

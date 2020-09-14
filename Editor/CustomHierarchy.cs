@@ -104,7 +104,7 @@ namespace Hananoki.CustomHierarchy {
 				_IMGUIContainer = Activator.CreateInstance( UnityTypes.IMGUIContainer, new object[] { (Action) OnDrawDockPane } );
 				if( E.i.toolbarOverride ) {
 					_window = HEditorWindow.Find( UnityTypes.SceneHierarchyWindow );
-					_window?.AddIMGUIContainer( OnDrawDockPane, true );
+					_window?.AddIMGUIContainer( _IMGUIContainer, true );
 				}
 
 
@@ -290,6 +290,36 @@ namespace Hananoki.CustomHierarchy {
 				DrawAnimationMonitor( rc, go );
 			}
 #endif
+			if( E.i.numpadCtrl ) {
+				if( Event.current.type == EventType.KeyUp ) {
+					if( Event.current.keyCode == KeyCode.Keypad8 && Event.current.control ) {
+						if( 1 <= Selection.activeGameObject.transform.GetSiblingIndex() ) {
+							Selection.activeGameObject.transform.SetSiblingIndex( Selection.activeGameObject.transform.GetSiblingIndex() - 1 );
+							Event.current.Use();
+						}
+					}
+					if( Event.current.keyCode == KeyCode.Keypad2 && Event.current.control ) {
+						Selection.activeGameObject.transform.SetSiblingIndex( Selection.activeGameObject.transform.GetSiblingIndex() + 1 );
+						Event.current.Use();
+					}
+					if( Event.current.keyCode == KeyCode.Keypad4 && Event.current.control ) {
+						Undo.SetTransformParent( Selection.activeGameObject.transform, Selection.activeGameObject.transform.parent.parent, "" );
+						EditorUtility.SetDirty( Selection.activeGameObject );
+						Event.current.Use();
+					}
+#if LOCAL_TEST
+					if( Event.current.keyCode == KeyCode.KeypadDivide && Event.current.control ) {
+						//Undo.SetTransformParent( Selection.activeGameObject.transform, Selection.activeGameObject.transform.parent.parent, "" );
+						//EditorUtility.SetDirty( Selection.activeGameObject );
+						Selection.activeGameObject.hideFlags |= HideFlags.HideInHierarchy;
+						EditorUtility.SetDirty( Selection.activeGameObject );
+						Selection.activeGameObject = Selection.activeGameObject.transform.parent.gameObject;
+						EditorApplication.RepaintHierarchyWindow();
+						Event.current.Use();
+					}
+#endif
+				}
+			}
 
 			//if( _RinkakuChange ) {
 			//	pos.x = pos.x - WIDTH;
@@ -411,7 +441,9 @@ namespace Hananoki.CustomHierarchy {
 						var ico = type == 2 ? s_styles.PrefabModel : s_styles.PrefabNormal;
 						if( HEditorGUI.IconButton( rc, ico ) ) {
 							//var aa = PrefabUtility.GetCorrespondingObjectFromSource( go );
-							var aa = t.MethodInvoke<GameObject>( "GetCorrespondingObjectFromSource", new object[] { go } );
+							//t.GetMethod( "GetCorrespondingObjectFromSource" );
+							//method.MakeGenericMethod( typeof( string ) );
+							var aa = t.MethodInvoke<GameObject>( typeof( GameObject ), "GetCorrespondingObjectFromSource", new object[] { go } );
 							if( aa != go ) {
 								EditorHelper.PingObject( aa );
 							}
