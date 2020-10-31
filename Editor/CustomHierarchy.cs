@@ -16,6 +16,8 @@ using E = Hananoki.CustomHierarchy.SettingsEditor;
 using SS = Hananoki.SharedModule.S;
 using UnityObject = UnityEngine.Object;
 
+
+
 namespace Hananoki.CustomHierarchy {
 	[InitializeOnLoad]
 	public static class CustomHierarchy {
@@ -25,24 +27,6 @@ namespace Hananoki.CustomHierarchy {
 		internal static EditorWindow _window;
 		internal static object _IMGUIContainer;
 
-		public class Styles {
-			public Texture2D PrefabNormal => Icon.Get( "$PrefabNormal" );
-			public Texture2D PrefabModel => Icon.Get( "$PrefabModel" );
-			public Texture2D MissingPrefabInstance => Icon.Get( "$MissingPrefabInstance" );
-			public Texture2D DisconnectedPrefab => Icon.Get( "$DisconnectedPrefab" );
-			public Texture2D DisconnectedModelPrefab => Icon.Get( "$DisconnectedModelPrefab" );
-			public Texture2D TreeLine => Icon.Get( "CH_I" );
-			public Texture2D TreeLineB => Icon.Get( "CH_T" );
-			public GUIStyle ControlLabel;
-			public Color lineColor;
-
-			public Styles() {
-				ControlLabel = new GUIStyle( "ControlLabel" );
-			}
-		}
-
-		public static Styles s_styles;
-
 
 		static CustomHierarchy() {
 			E.Load();
@@ -50,55 +34,56 @@ namespace Hananoki.CustomHierarchy {
 			//EditorSceneManager.sceneOpened += ( scene, mode ) => { Debug.Log( "sceneOpened" ); };
 		}
 
+
+
 		static void OnDrawDockPane() {
 			HGUIScope.Horizontal( __ );
 			void __() {
 				GUILayout.Space( 120 );
 
-				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_animationwindow ) ) {
+				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_animationwindow, SS._Animation ) ) {
 					HEditorWindow.ShowWindow( UnityTypes.AnimationWindow );
 				}
-				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_graphs_animatorcontrollertool ) ) {
+				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_graphs_animatorcontrollertool, SS._Animator ) ) {
 					HEditorWindow.ShowWindow( UnityTypes.AnimatorControllerTool );
 				}
-
-				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_timeline_timelinewindow ) ) {
+				
+				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_timeline_timelinewindow, SS._Timeline ) ) {
 					HEditorWindow.ShowWindow( UnityTypes.TimelineWindow );
 				}
 				GUILayout.Space( 8 );
-				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_consolewindow ) ) {
+				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_consolewindow, SS._Console ) ) {
 					HEditorWindow.ShowWindow( UnityTypes.ConsoleWindow );
 				}
-				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_profilerwindow ) ) {
+				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_profilerwindow, SS._Profiler ) ) {
 					HEditorWindow.ShowWindow( UnityTypes.ProfilerWindow );
 				}
 			}
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="instanceID"></param>
-		/// <param name="selectionRect"></param>
+
+
 		static void HierarchyWindowItemCallback( int instanceID, Rect selectionRect ) {
 
 			if( !E.i.Enable ) return;
 
-			if( s_styles == null ) {
-				s_styles = new Styles();
-				s_styles.lineColor = E.i.lineColor;
-#if TEST
-				if( UnitySymbol.Has( "UNITY_2019_3_OR_NEWER" ) ) {
-					object wnd = EditorUtils.SceneHierarchyWindow();
-					var _sceneHierarchy = wnd.GetProperty<object>( "sceneHierarchy" );
-					var _treeView = _sceneHierarchy.GetProperty<object>( "treeView" );
-					var _gui = _treeView.GetProperty<object>( "gui" );
-					//var _selectionStyle = _gui.GetProperty<object>( "selectionStyle" );
+			Styles.Init();
 
-					_gui.SetProperty( "selectionStyle", new GUIStyle( "FrameBox" ) );
-				}
-#endif
-			}
+//			if( s_styles == null ) {
+//				s_styles = new Styles();
+//				s_styles.lineColor = E.i.lineColor;
+//#if TEST
+//				if( UnitySymbol.Has( "UNITY_2019_3_OR_NEWER" ) ) {
+//					object wnd = EditorUtils.SceneHierarchyWindow();
+//					var _sceneHierarchy = wnd.GetProperty<object>( "sceneHierarchy" );
+//					var _treeView = _sceneHierarchy.GetProperty<object>( "treeView" );
+//					var _gui = _treeView.GetProperty<object>( "gui" );
+//					//var _selectionStyle = _gui.GetProperty<object>( "selectionStyle" );
+
+//					_gui.SetProperty( "selectionStyle", new GUIStyle( "FrameBox" ) );
+//				}
+//#endif
+//			}
 
 			if( _IMGUIContainer == null ) {
 				_IMGUIContainer = Activator.CreateInstance( UnityTypes.IMGUIContainer, new object[] { (Action) OnDrawDockPane } );
@@ -224,7 +209,6 @@ namespace Hananoki.CustomHierarchy {
 				}
 			}
 
-
 			if( E.i.IconClickContext ) {
 				var r = selectionRect;
 				//r.x += 3;
@@ -233,19 +217,19 @@ namespace Hananoki.CustomHierarchy {
 				if( EditorHelper.HasMouseClick( r ) ) {
 					var m = new GenericMenu();
 					m.AddItem( SS._OpenInNewInspector, false, _uobj => EditorHelper.ShowNewInspectorWindow( _uobj.ToCast<UnityObject>() ), go );
-					m.AddItem( S._Moveuponelevel, false, _uobj => {
-						var gobj = _uobj as GameObject;
-						Undo.SetTransformParent( gobj.transform, gobj.transform.parent.parent, "" );
-						EditorUtility.SetDirty( gobj );
-					}, go );
-#if LOCAL_TEST
-					m.AddItem( "Hide", false, _uobj => {
-						var gobj = _uobj as GameObject;
-						gobj.hideFlags |= HideFlags.HideInHierarchy;
-						EditorUtility.SetDirty( gobj );
-						EditorApplication.RepaintHierarchyWindow();
-					}, go );
-#endif
+					//m.AddItem( S._Moveuponelevel, false, _uobj => {
+					//	var gobj = _uobj as GameObject;
+					//	Undo.SetTransformParent( gobj.transform, gobj.transform.parent.parent, "" );
+					//	EditorUtility.SetDirty( gobj );
+					//}, go );
+					//#if LOCAL_TEST
+					//					m.AddItem( "Hide", false, _uobj => {
+					//						var gobj = _uobj as GameObject;
+					//						gobj.hideFlags |= HideFlags.HideInHierarchy;
+					//						EditorUtility.SetDirty( gobj );
+					//						EditorApplication.RepaintHierarchyWindow();
+					//					}, go );
+					//#endif
 					m.DropDown( r );
 					Event.current.Use();
 				}
@@ -267,7 +251,7 @@ namespace Hananoki.CustomHierarchy {
 					return ii == 0 ? true : false;
 				}
 				if( check( go.transform ) ) {
-					GUI.DrawTexture( ra, s_styles.TreeLineB );
+					GUI.DrawTexture( ra, Styles.treeLineB );
 				}
 				//for( int i = 0; i < go.transform.childCount; i++ ) {
 				//	go.transform.GetChild( i ).hideFlags = HideFlags.None;
@@ -277,11 +261,65 @@ namespace Hananoki.CustomHierarchy {
 				while( tras != null ) {
 					ra.x -= 14;
 					if( tras.parent != null ) {
-						GUI.DrawTexture( ra, s_styles.TreeLine );
+						GUI.DrawTexture( ra, Styles.treeLine );
 					}
 					tras = tras.parent;
 				}
 				//EditorGUI.DrawRect( selectionRect ,new Color(0,0,1,0.25f));
+			}
+
+			if( E.i.miniInspector ) {
+				{//textmeshpro
+					go.InvokeComponentFromType( UnityTypes.TMPro_TMP_Text, textmeshpro );
+					void textmeshpro( Component comp ) {
+						rc = selectionRect;
+						//rc.x += 100;
+						//comp.GetCachedIcon
+						var pos = EditorStyles.label.CalcSize( EditorHelper.TempContent( go.name ) );
+						rc.x += pos.x + 20;
+						rc.width = 16;
+
+						GUI.Label( rc, EditorHelper.TempContent( EditorGUIUtility.ObjectContent( comp, UnityTypes.TMPro_TMP_Text ).image ) );
+						if( EditorHelper.HasMouseClick( rc ) ) {
+							ComponentPopupWindow.Open( comp, ( b ) => { } );
+							Event.current.Use();
+						}
+					}
+				}
+				{//image
+					go.InvokeComponentFromType( UnityTypes.UnityEngine_UI_Image, image );
+					void image( Component comp ) {
+						rc = selectionRect;
+						//rc.x += 100;
+						//comp.GetCachedIcon
+						var pos = EditorStyles.label.CalcSize( EditorHelper.TempContent( go.name ) );
+						rc.x += pos.x + 20;
+						rc.width = 16;
+
+						GUI.Label( rc, EditorHelper.TempContent( EditorGUIUtility.ObjectContent( comp, UnityTypes.UnityEngine_UI_Image ).image ) );
+						if( EditorHelper.HasMouseClick( rc ) ) {
+							ComponentPopupWindow.Open( comp, ( b ) => { } );
+							Event.current.Use();
+						}
+					}
+				}
+				{//spriteRenderer
+					go.InvokeComponentFromType( UnityTypes.UnityEngine_SpriteRenderer, spriteRenderer );
+					void spriteRenderer( Component comp ) {
+						rc = selectionRect;
+						//rc.x += 100;
+						//comp.GetCachedIcon
+						var pos = EditorStyles.label.CalcSize( EditorHelper.TempContent( go.name ) );
+						rc.x += pos.x + 20;
+						rc.width = 16;
+
+						GUI.Label( rc, EditorHelper.TempContent( EditorGUIUtility.ObjectContent( comp, UnityTypes.UnityEngine_SpriteRenderer ).image ) );
+						if( EditorHelper.HasMouseClick( rc ) ) {
+							ComponentPopupWindow.Open( comp, ( b ) => { } );
+							Event.current.Use();
+						}
+					}
+				}
 			}
 
 #if false
@@ -290,30 +328,38 @@ namespace Hananoki.CustomHierarchy {
 				DrawAnimationMonitor( rc, go );
 			}
 #endif
-			if( E.i.numpadCtrl ) {
+			if( E.i.numpadCtrl && !EditorGUIUtility.editingTextField ) {
 				if( Event.current.type == EventType.KeyUp ) {
-					if( Event.current.keyCode == KeyCode.Keypad8 && Event.current.control ) {
+					if( Event.current.keyCode == KeyCode.Keypad8 ) {
 						if( 1 <= Selection.activeGameObject.transform.GetSiblingIndex() ) {
 							Selection.activeGameObject.transform.SetSiblingIndex( Selection.activeGameObject.transform.GetSiblingIndex() - 1 );
 							Event.current.Use();
 						}
 					}
-					if( Event.current.keyCode == KeyCode.Keypad2 && Event.current.control ) {
+					if( Event.current.keyCode == KeyCode.Keypad2 ) {
 						Selection.activeGameObject.transform.SetSiblingIndex( Selection.activeGameObject.transform.GetSiblingIndex() + 1 );
 						Event.current.Use();
 					}
-					if( Event.current.keyCode == KeyCode.Keypad4 && Event.current.control ) {
+					if( Event.current.keyCode == KeyCode.Keypad4 ) {
 						Undo.SetTransformParent( Selection.activeGameObject.transform, Selection.activeGameObject.transform.parent.parent, "" );
 						EditorUtility.SetDirty( Selection.activeGameObject );
 						Event.current.Use();
 					}
+					if( Event.current.keyCode == KeyCode.Keypad5 ) {
+						//Undo.SetTransformParent( Selection.activeGameObject.transform, Selection.activeGameObject.transform.parent.parent, "" );
+						//EditorUtility.SetDirty( Selection.activeGameObject );
+						Selection.activeGameObject.SetActive( !Selection.activeGameObject.activeSelf );
+						Event.current.Use();
+					}
 #if LOCAL_TEST
-					if( Event.current.keyCode == KeyCode.KeypadDivide && Event.current.control ) {
+					if( Event.current.keyCode == KeyCode.KeypadDivide ) {
 						//Undo.SetTransformParent( Selection.activeGameObject.transform, Selection.activeGameObject.transform.parent.parent, "" );
 						//EditorUtility.SetDirty( Selection.activeGameObject );
 						Selection.activeGameObject.hideFlags |= HideFlags.HideInHierarchy;
 						EditorUtility.SetDirty( Selection.activeGameObject );
-						Selection.activeGameObject = Selection.activeGameObject.transform.parent.gameObject;
+						if( Selection.activeGameObject.transform.parent != null ) {
+							Selection.activeGameObject = Selection.activeGameObject.transform.parent.gameObject;
+						}
 						EditorApplication.RepaintHierarchyWindow();
 						Event.current.Use();
 					}
@@ -360,7 +406,7 @@ namespace Hananoki.CustomHierarchy {
 			pos.x = 0;
 			pos.xMax = selectionRect.xMax;
 
-			EditorGUI.DrawRect( pos, s_styles.lineColor );
+			EditorGUI.DrawRect( pos, E.i.lineColor );
 		}
 
 
@@ -438,7 +484,7 @@ namespace Hananoki.CustomHierarchy {
 							m.DropDown();
 							Event.current.Use();
 						}
-						var ico = type == 2 ? s_styles.PrefabModel : s_styles.PrefabNormal;
+						var ico = type == 2 ? Styles.prefabModel : Styles.prefabNormal;
 						if( HEditorGUI.IconButton( rc, ico ) ) {
 							//var aa = PrefabUtility.GetCorrespondingObjectFromSource( go );
 							//t.GetMethod( "GetCorrespondingObjectFromSource" );
@@ -450,11 +496,11 @@ namespace Hananoki.CustomHierarchy {
 						}
 						break;
 					case 2:// PrefabInstanceStatus.Disconnected:
-						if( GUI.Button( rc, s_styles.DisconnectedPrefab, s_styles.ControlLabel ) ) {
+						if( GUI.Button( rc, Styles.disconnectedPrefab, Styles.controlLabel ) ) {
 						}
 						break;
 					case 3:// PrefabInstanceStatus.MissingAsset:
-						if( GUI.Button( rc, s_styles.MissingPrefabInstance, s_styles.ControlLabel ) ) {
+						if( GUI.Button( rc, Styles.missingPrefabInstance, Styles.controlLabel ) ) {
 						}
 						break;
 				}
@@ -462,7 +508,7 @@ namespace Hananoki.CustomHierarchy {
 			else {
 				var type = PrefabUtility.GetPrefabType( go );
 				if( type == PrefabType.PrefabInstance ) {
-					if( GUI.Button( rc, s_styles.PrefabNormal, s_styles.ControlLabel ) ) {
+					if( GUI.Button( rc, Styles.prefabNormal, Styles.controlLabel ) ) {
 						//Debug.Log( "PrefabType.PrefabInstance" );
 						//var aa = PrefabUtility.GetPrefabParent( go );
 						//var bb = AssetDatabase.GetAssetPath( aa );
@@ -473,22 +519,22 @@ namespace Hananoki.CustomHierarchy {
 					//GUI.DrawTexture( pos, EditorGUIUtility.FindTexture( "PrefabNormal Icon" ), ScaleMode.ScaleToFit, true );
 				}
 				else if( type == PrefabType.ModelPrefabInstance ) {
-					if( GUI.Button( rc, s_styles.PrefabModel, s_styles.ControlLabel ) ) {
+					if( GUI.Button( rc, Styles.prefabModel, Styles.controlLabel ) ) {
 						//Debug.Log( "PrefabType.ModelPrefabInstance" );
 					}
 				}
 				else if( type == PrefabType.DisconnectedPrefabInstance ) {
-					if( GUI.Button( rc, s_styles.DisconnectedPrefab, s_styles.ControlLabel ) ) {
+					if( GUI.Button( rc, Styles.disconnectedPrefab, Styles.controlLabel ) ) {
 						//Debug.Log( "PrefabType.DisconnectedPrefabInstance" );
 					}
 				}
 				else if( type == PrefabType.DisconnectedModelPrefabInstance ) {
-					if( GUI.Button( rc, s_styles.DisconnectedModelPrefab, s_styles.ControlLabel ) ) {
+					if( GUI.Button( rc, Styles.disconnectedModelPrefab, Styles.controlLabel ) ) {
 						//Debug.Log( "PrefabType.DisconnectedModelPrefabInstance" );
 					}
 				}
 				else if( type == PrefabType.MissingPrefabInstance ) {
-					if( GUI.Button( rc, s_styles.MissingPrefabInstance, s_styles.ControlLabel ) ) {
+					if( GUI.Button( rc, Styles.missingPrefabInstance, Styles.controlLabel ) ) {
 						//Debug.Log( "PrefabType.MissingPrefabInstance" );
 					}
 				}

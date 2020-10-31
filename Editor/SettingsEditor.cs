@@ -29,6 +29,7 @@ namespace Hananoki.CustomHierarchy {
 		
 		public bool toolbarOverride;
 		public bool numpadCtrl;
+		public bool miniInspector;
 
 		public static E i;
 
@@ -119,15 +120,17 @@ namespace Hananoki.CustomHierarchy {
 
 				_toolbarOverride = HEditorGUILayout.ToggleLeft( "Toolbar Override (UNITY_2019_3_OR_NEWER)", E.i.toolbarOverride );
 				E.i.numpadCtrl = HEditorGUILayout.ToggleLeft( S._NumpadControl, E.i.numpadCtrl );
+				E.i.miniInspector = HEditorGUILayout.ToggleLeft( "MiniInspector", E.i.miniInspector );
+				
 			}
 			EditorGUI.indentLevel--;
 
 
 			if( EditorGUI.EndChangeCheck() ) {
 				
-				if( CustomHierarchy.s_styles != null ) {
-					CustomHierarchy.s_styles.lineColor = E.i.lineColor;
-				}
+				//if( CustomHierarchy.s_styles != null ) {
+				//	CustomHierarchy.s_styles.lineColor = E.i.lineColor;
+				//}
 				
 				if( E.i.toolbarOverride != _toolbarOverride ) {
 					CustomHierarchy._window = HEditorWindow.Find( UnityTypes.SceneHierarchyWindow );

@@ -1,5 +1,15 @@
 # CustomHierarchy
 
+## [0.6.6] - 2020-11-01
+- SharedModule v1.5.8 or later
+
+### Added
+- Added Mini Inspector
+
+### Changed
+- Separated style
+- Numpad Control ctrl is no longer needed
+
 ## [0.6.5] - 2020-09-14
 
 ### Added
