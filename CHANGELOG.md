@@ -1,5 +1,11 @@
 # CustomHierarchy
 
+## [0.6.7] - 2020-11-15
+- SharedModule v1.6.0 or later
+
+### Changed
+- Change the handling of embedded resources
+
 ## [0.6.6] - 2020-11-01
 - SharedModule v1.5.8 or later
 

@@ -5,7 +5,7 @@ namespace Hananoki.CustomHierarchy {
   public static class Package {
     public const string name = "CustomHierarchy";
     public const string editorPrefName = "Hananoki.CustomHierarchy";
-    public const string version = "0.6.6-preview";
+    public const string version = "0.6.7-preview";
   }
   
 #if UNITY_EDITOR
