@@ -1,8 +1,8 @@
-﻿Show toggle to toggle game object active	ゲームオブジェクトのアクティブを切り替えるトグルを表示する
-Display prefab status with icons	プレハブの状態をアイコンで表示する
-Move up one level	上の階層に移動する
-Ping a scene file by clicking the scene icon	シーンアイコンクリックでシーンファイルをPingする
-Display tag name and layer name	タグ名とレイヤー名を表示する
-Display the tree	ツリー表示をする
-Item display offset X	アイテム表示オフセットX
-Numpad Control	テンキーコントロール
+﻿ゲームオブジェクトのアクティブを切り替えるトグルを表示する
+プレハブの状態をアイコンで表示する
+上の階層に移動する
+シーンアイコンクリックでシーンファイルをPingする
+タグ名とレイヤー名を表示する
+ツリー表示をする
+アイテム表示オフセットX
+テンキーコントロール

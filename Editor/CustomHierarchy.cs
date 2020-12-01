@@ -7,15 +7,15 @@ using Hananoki.Reflection;
 using System;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEditor.SceneManagement;
 
 using E = Hananoki.CustomHierarchy.SettingsEditor;
 using SS = Hananoki.SharedModule.S;
 using UnityObject = UnityEngine.Object;
-
+using PrefabOverridesWindow = UnityReflection.UnityEditorPrefabOverridesWindow;
+using UnityEditorSceneManagementEditorSceneManager = UnityReflection.UnityEditorSceneManagementEditorSceneManager;
 
 
 namespace Hananoki.CustomHierarchy {
@@ -37,28 +37,27 @@ namespace Hananoki.CustomHierarchy {
 
 
 		static void OnDrawDockPane() {
-			HGUIScope.Horizontal( __ );
-			void __() {
-				GUILayout.Space( 120 );
+			HGUIScope.Horizontal();
+			GUILayout.Space( 120 );
 
-				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_animationwindow, SS._Animation ) ) {
-					HEditorWindow.ShowWindow( UnityTypes.AnimationWindow );
-				}
-				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_graphs_animatorcontrollertool, SS._Animator ) ) {
-					HEditorWindow.ShowWindow( UnityTypes.AnimatorControllerTool );
-				}
-				
-				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_timeline_timelinewindow, SS._Timeline ) ) {
-					HEditorWindow.ShowWindow( UnityTypes.TimelineWindow );
-				}
-				GUILayout.Space( 8 );
-				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_consolewindow, SS._Console ) ) {
-					HEditorWindow.ShowWindow( UnityTypes.ConsoleWindow );
-				}
-				if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_profilerwindow, SS._Profiler ) ) {
-					HEditorWindow.ShowWindow( UnityTypes.ProfilerWindow );
-				}
+			if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_animationwindow, SS._Animation ) ) {
+				HEditorWindow.ShowWindow( UnityTypes.UnityEditor_AnimationWindow);
 			}
+			if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_graphs_animatorcontrollertool, SS._Animator ) ) {
+				HEditorWindow.ShowWindow( UnityTypes.UnityEditor_Graphs_AnimatorControllerTool );
+			}
+
+			if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_timeline_timelinewindow, SS._Timeline ) ) {
+				HEditorWindow.ShowWindow( UnityTypes.UnityEditor_Timeline_TimelineWindow );
+			}
+			GUILayout.Space( 8 );
+			if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_consolewindow, SS._Console ) ) {
+				HEditorWindow.ShowWindow( UnityTypes.UnityEditor_ConsoleWindow );
+			}
+			if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_profilerwindow, SS._Profiler ) ) {
+				HEditorWindow.ShowWindow( UnityTypes.UnityEditor_ProfilerWindow );
+			}
+			HGUIScope.End();
 		}
 
 
@@ -69,26 +68,26 @@ namespace Hananoki.CustomHierarchy {
 
 			Styles.Init();
 
-//			if( s_styles == null ) {
-//				s_styles = new Styles();
-//				s_styles.lineColor = E.i.lineColor;
-//#if TEST
-//				if( UnitySymbol.Has( "UNITY_2019_3_OR_NEWER" ) ) {
-//					object wnd = EditorUtils.SceneHierarchyWindow();
-//					var _sceneHierarchy = wnd.GetProperty<object>( "sceneHierarchy" );
-//					var _treeView = _sceneHierarchy.GetProperty<object>( "treeView" );
-//					var _gui = _treeView.GetProperty<object>( "gui" );
-//					//var _selectionStyle = _gui.GetProperty<object>( "selectionStyle" );
+			//			if( s_styles == null ) {
+			//				s_styles = new Styles();
+			//				s_styles.lineColor = E.i.lineColor;
+			//#if TEST
+			//				if( UnitySymbol.Has( "UNITY_2019_3_OR_NEWER" ) ) {
+			//					object wnd = EditorUtils.SceneHierarchyWindow();
+			//					var _sceneHierarchy = wnd.GetProperty<object>( "sceneHierarchy" );
+			//					var _treeView = _sceneHierarchy.GetProperty<object>( "treeView" );
+			//					var _gui = _treeView.GetProperty<object>( "gui" );
+			//					//var _selectionStyle = _gui.GetProperty<object>( "selectionStyle" );
 
-//					_gui.SetProperty( "selectionStyle", new GUIStyle( "FrameBox" ) );
-//				}
-//#endif
-//			}
+			//					_gui.SetProperty( "selectionStyle", new GUIStyle( "FrameBox" ) );
+			//				}
+			//#endif
+			//			}
 
 			if( _IMGUIContainer == null ) {
-				_IMGUIContainer = Activator.CreateInstance( UnityTypes.IMGUIContainer, new object[] { (Action) OnDrawDockPane } );
+				_IMGUIContainer = Activator.CreateInstance( UnityTypes.UnityEngine_UIElements_IMGUIContainer, new object[] { (Action) OnDrawDockPane } );
 				if( E.i.toolbarOverride ) {
-					_window = HEditorWindow.Find( UnityTypes.SceneHierarchyWindow );
+					_window = HEditorWindow.Find( UnityTypes.UnityEditor_SceneHierarchyWindow );
 					_window?.AddIMGUIContainer( _IMGUIContainer, true );
 				}
 
@@ -129,7 +128,7 @@ namespace Hananoki.CustomHierarchy {
 				if( E.i.SceneIconClickPing ) {
 					selectionRect.width = 16;
 					if( EditorHelper.HasMouseClick( selectionRect ) ) {
-						var scene = (Scene) R.Method( "GetSceneByHandle", typeof( EditorSceneManager ) ).Invoke( null, new object[] { instanceID } );
+						var scene = UnityEditorSceneManagementEditorSceneManager.GetSceneByHandle( instanceID );
 						EditorGUIUtility.PingObject( AssetDatabase.LoadAssetAtPath( scene.path, typeof( SceneAsset ) ) );
 					}
 				}
@@ -216,7 +215,7 @@ namespace Hananoki.CustomHierarchy {
 				//EditorGUI.DrawRect( r, new Color( 0, 0, 1, 0.5f ) );
 				if( EditorHelper.HasMouseClick( r ) ) {
 					var m = new GenericMenu();
-					m.AddItem( SS._OpenInNewInspector, false, _uobj => EditorHelper.ShowNewInspectorWindow( _uobj.ToCast<UnityObject>() ), go );
+					m.AddItem( SS._OpenInNewInspector, EditorContextHandler.ShowNewInspectorWindow, go );
 					//m.AddItem( S._Moveuponelevel, false, _uobj => {
 					//	var gobj = _uobj as GameObject;
 					//	Undo.SetTransformParent( gobj.transform, gobj.transform.parent.parent, "" );
@@ -460,49 +459,49 @@ namespace Hananoki.CustomHierarchy {
 				//var status = PrefabUtility.GetPrefabInstanceStatus( go );
 				//var type = PrefabUtility.GetPrefabAssetType( go );
 				switch( status ) {
-					case 0:// PrefabInstanceStatus.NotAPrefab:
-						break;
-					case 1:// PrefabInstanceStatus.Connected:
-						if( EditorHelper.HasMouseClick( rc, EventMouseButton.R ) ) {
-							var wnd = new UnityPrefabOverridesWindow( go );
+				case 0:// PrefabInstanceStatus.NotAPrefab:
+					break;
+				case 1:// PrefabInstanceStatus.Connected:
+					if( EditorHelper.HasMouseClick( rc, EventMouseButton.R ) ) {
+						var wnd = new PrefabOverridesWindow( go );
 
-							var m = new GenericMenu();
-							if( !wnd.IsShowingActionButton() ) {
-								m.AddDisabledItem( "Apply All" );
-								m.AddDisabledItem( "Revert All" );
-							}
-							else {
-								//m.AddItem( "Apply All", ( context ) => {
-								//	(var a, var b) = (System.ValueTuple<UnityPrefabOverridesWindow, GameObject>) context;
-								//	a.ApplyAll();
-								//}, (wnd, go) );
-								//m.AddItem( "Revert All", ( context ) => {
-								//	(var a, var b) = (System.ValueTuple<UnityPrefabOverridesWindow, GameObject>) context;
-								//	a.RevertAll();
-								//}, (wnd, go) );
-							}
-							m.DropDown();
-							Event.current.Use();
+						var m = new GenericMenu();
+						if( !wnd.IsShowingActionButton() ) {
+							m.AddDisabledItem( "Apply All" );
+							m.AddDisabledItem( "Revert All" );
 						}
-						var ico = type == 2 ? Styles.prefabModel : Styles.prefabNormal;
-						if( HEditorGUI.IconButton( rc, ico ) ) {
-							//var aa = PrefabUtility.GetCorrespondingObjectFromSource( go );
-							//t.GetMethod( "GetCorrespondingObjectFromSource" );
-							//method.MakeGenericMethod( typeof( string ) );
-							var aa = t.MethodInvoke<GameObject>( typeof( GameObject ), "GetCorrespondingObjectFromSource", new object[] { go } );
-							if( aa != go ) {
-								EditorHelper.PingObject( aa );
-							}
+						else {
+							//m.AddItem( "Apply All", ( context ) => {
+							//	(var a, var b) = (System.ValueTuple<UnityPrefabOverridesWindow, GameObject>) context;
+							//	a.ApplyAll();
+							//}, (wnd, go) );
+							//m.AddItem( "Revert All", ( context ) => {
+							//	(var a, var b) = (System.ValueTuple<UnityPrefabOverridesWindow, GameObject>) context;
+							//	a.RevertAll();
+							//}, (wnd, go) );
 						}
-						break;
-					case 2:// PrefabInstanceStatus.Disconnected:
-						if( GUI.Button( rc, Styles.disconnectedPrefab, Styles.controlLabel ) ) {
+						m.DropDownAtMousePosition();
+						//Event.current.Use();
+					}
+					var ico = type == 2 ? Styles.prefabModel : Styles.prefabNormal;
+					if( HEditorGUI.IconButton( rc, ico ) ) {
+						//var aa = PrefabUtility.GetCorrespondingObjectFromSource( go );
+						//t.GetMethod( "GetCorrespondingObjectFromSource" );
+						//method.MakeGenericMethod( typeof( string ) );
+						var aa = t.MethodInvoke<GameObject>( typeof( GameObject ), "GetCorrespondingObjectFromSource", new object[] { go } );
+						if( aa != go ) {
+							EditorHelper.PingObject( aa );
 						}
-						break;
-					case 3:// PrefabInstanceStatus.MissingAsset:
-						if( GUI.Button( rc, Styles.missingPrefabInstance, Styles.controlLabel ) ) {
-						}
-						break;
+					}
+					break;
+				case 2:// PrefabInstanceStatus.Disconnected:
+					if( GUI.Button( rc, Styles.disconnectedPrefab, Styles.controlLabel ) ) {
+					}
+					break;
+				case 3:// PrefabInstanceStatus.MissingAsset:
+					if( GUI.Button( rc, Styles.missingPrefabInstance, Styles.controlLabel ) ) {
+					}
+					break;
 				}
 			}
 			else {

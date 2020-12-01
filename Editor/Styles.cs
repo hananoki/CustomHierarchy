@@ -16,15 +16,15 @@ namespace Hananoki.CustomHierarchy {
 		public static GUIStyle controlLabel => s_styles.ControlLabel;
 
 
-		public Texture2D PrefabNormal => Icon.Get( EditorResource._PrefabNormal );
-		public Texture2D PrefabModel => Icon.Get( EditorResource._PrefabModel );
-		public Texture2D MissingPrefabInstance => Icon.Get( EditorResource._MissingPrefabInstance );
-		public Texture2D DisconnectedPrefab => Icon.Get( EditorResource._DisconnectedPrefab );
-		public Texture2D DisconnectedModelPrefab => Icon.Get( EditorResource._DisconnectedModelPrefab );
-		public Texture2D TreeLine => Icon.Get( EditorResource.CH_I );
-		public Texture2D TreeLineB => Icon.Get( EditorResource.CH_T );
+		public Texture2D PrefabNormal => Icon._PrefabNormal;
+		public Texture2D PrefabModel => Icon._PrefabModel;
+		public Texture2D MissingPrefabInstance => Icon._MissingPrefabInstance;
+		public Texture2D DisconnectedPrefab => Icon._DisconnectedPrefab;
+		public Texture2D DisconnectedModelPrefab => Icon._DisconnectedModelPrefab;
+		public Texture2D TreeLine => Icon.CH_I;
+		public Texture2D TreeLineB => Icon.CH_T;
 
-		
+
 		public GUIStyle ControlLabel;
 
 

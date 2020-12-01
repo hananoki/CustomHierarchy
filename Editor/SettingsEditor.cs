@@ -113,7 +113,7 @@ namespace Hananoki.CustomHierarchy {
 				//#endif
 
 				GUILayout.Space( 8f );
-				EditorGUILayout.LabelField( $"* {SS._Experimental}", EditorStyles.boldLabel );
+				HEditorGUILayout.HeaderTitle( $"* {SS._Experimental}"/*, EditorStyles.boldLabel*/ );
 				E.i.IconClickContext = HEditorGUILayout.ToggleLeft( SS._ContextMenuWithIconClick, E.i.IconClickContext );
 				E.i.SceneIconClickPing = HEditorGUILayout.ToggleLeft( S._Pingascenefilebyclickingthesceneicon, E.i.SceneIconClickPing );
 				E.i.showLayerAndTag = HEditorGUILayout.ToggleLeft( S._Displaytagnameandlayername, E.i.showLayerAndTag );
@@ -133,7 +133,7 @@ namespace Hananoki.CustomHierarchy {
 				//}
 				
 				if( E.i.toolbarOverride != _toolbarOverride ) {
-					CustomHierarchy._window = HEditorWindow.Find( UnityTypes.SceneHierarchyWindow );
+					CustomHierarchy._window = HEditorWindow.Find( UnityTypes.UnityEditor_SceneHierarchyWindow );
 					E.i.toolbarOverride = _toolbarOverride;
 					if( E.i.toolbarOverride ) {
 						CustomHierarchy._window?.AddIMGUIContainer( CustomHierarchy._IMGUIContainer, true );

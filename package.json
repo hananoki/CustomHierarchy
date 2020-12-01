@@ -1,7 +1,7 @@
 {
   "name": "com.hananoki.custom-hierarchy",
   "displayName": "CustomHierarchy",
-  "version": "0.6.7-preview",
+  "version": "0.6.8-preview",
   "unity": "2018.3",
   "description": "A simple customized hierarchy",
   "keywords": [

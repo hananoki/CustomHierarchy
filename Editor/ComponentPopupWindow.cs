@@ -78,7 +78,7 @@ namespace Hananoki.CustomHierarchy {
 		}
 
 
-		void OnGUI() {
+		public override void OnDefaultGUI() {
 			//if( editor == null ) {
 			//	editor = Editor.CreateEditor( com );
 			//	editor.OnInspectorGUI();
@@ -90,48 +90,51 @@ namespace Hananoki.CustomHierarchy {
 			//editor.OnInspectorGUI();
 			if( UnityTypes.TMPro_TMP_Text != null && com.GetType().IsSubclassOf( UnityTypes.TMPro_TMP_Text ) ) {
 				var s = com.GetProperty<string>( "text" );
-				HGUIScope.Horizontal( _ );
-				void _() {
-					if( GUILayout.Button( "#", GUILayout.ExpandWidth( false ) ) ) EditorHelper.SetGameObjectName( com, "#" );
-					if( GUILayout.Button( "##", GUILayout.ExpandWidth( false ) ) ) EditorHelper.SetGameObjectName( com, "##" );
-					if( GUILayout.Button( "Set GameObject Name" ) ) EditorHelper.SetGameObjectName( com );
-				}
-				EditorGUI.BeginChangeCheck();
+				HGUIScope.Horizontal();
+				if( GUILayout.Button( "#", GUILayout.ExpandWidth( false ) ) ) EditorHelper.SetGameObjectName( com, "#" );
+				if( GUILayout.Button( "##", GUILayout.ExpandWidth( false ) ) ) EditorHelper.SetGameObjectName( com, "##" );
+				if( GUILayout.Button( "Set GameObject Name" ) ) EditorHelper.SetGameObjectName( com );
+				HGUIScope.End();
+
+				HGUIScope.Change();
 				s = EditorGUILayout.TextArea( s, EditorStyles.textField, GUILayout.Height( 20 * 3 ) );
-				if( EditorGUI.EndChangeCheck() ) {
+				if( HGUIScope.End() ) {
 					com.SetProperty<string>( "text", s );
+					SceneView.RepaintAll();
 					//Debug.Log( typeof( Image ).AssemblyQualifiedName );
 					//Debug.Log( typeof( RawImage ).AssemblyQualifiedName );
 				}
 			}
 			if( UnityTypes.UnityEngine_UI_Image != null && com.GetType() == ( UnityTypes.UnityEngine_UI_Image ) ) {
-				HGUIScope.Horizontal( _ );
-				void _() {
-					if( GUILayout.Button( "#", GUILayout.ExpandWidth( false ) ) ) EditorHelper.SetGameObjectName( com, "#" );
+				HGUIScope.Horizontal();
+				if( GUILayout.Button( "#", GUILayout.ExpandWidth( false ) ) ) EditorHelper.SetGameObjectName( com, "#" );
 					if( GUILayout.Button( "##", GUILayout.ExpandWidth( false ) ) ) EditorHelper.SetGameObjectName( com, "##" );
 					if( GUILayout.Button( "Set GameObject Name" ) ) EditorHelper.SetGameObjectName( com );
-				}
+				HGUIScope.End();
+
 				var s = com.GetProperty<Sprite>( "sprite" );
-				EditorGUI.BeginChangeCheck();
+				HGUIScope.Change();
 				s = HEditorGUILayout.ObjectField<Sprite>( s );
-				if( EditorGUI.EndChangeCheck() ) {
+				if( HGUIScope.End() ) {
 					com.SetProperty<Sprite>( "sprite", s );
+					SceneView.RepaintAll();
 					//Debug.Log( typeof( Image ).AssemblyQualifiedName );
 					//Debug.Log( typeof( RawImage ).AssemblyQualifiedName );
 				}
 			}
 			if( UnityTypes.UnityEngine_SpriteRenderer != null && com.GetType() == ( UnityTypes.UnityEngine_SpriteRenderer ) ) {
-				HGUIScope.Horizontal( _ );
-				void _() {
-					if( GUILayout.Button( "#", GUILayout.ExpandWidth( false ) ) ) EditorHelper.SetGameObjectName( com, "#" );
+				HGUIScope.Horizontal();
+				if( GUILayout.Button( "#", GUILayout.ExpandWidth( false ) ) ) EditorHelper.SetGameObjectName( com, "#" );
 					if( GUILayout.Button( "##", GUILayout.ExpandWidth( false ) ) ) EditorHelper.SetGameObjectName( com, "##" );
 					if( GUILayout.Button( "Set GameObject Name" ) ) EditorHelper.SetGameObjectName( com );
-				}
+				HGUIScope.End();
+
 				var s = com.GetProperty<Sprite>( "sprite" );
-				EditorGUI.BeginChangeCheck();
+				HGUIScope.Change();
 				s = HEditorGUILayout.ObjectField<Sprite>( s );
-				if( EditorGUI.EndChangeCheck() ) {
+				if( HGUIScope.End() ) {
 					com.SetProperty<Sprite>( "sprite", s );
+					SceneView.RepaintAll();
 					//Debug.Log( typeof( Image ).AssemblyQualifiedName );
 					//Debug.Log( typeof( RawImage ).AssemblyQualifiedName );
 				}
