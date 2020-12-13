@@ -7,14 +7,13 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-using Hananoki.Reflection;
-using Hananoki.Extensions;
+using HananokiEditor.Extensions;
 
 #if UNITY_EDITOR
 #endif
 
 
-namespace Hananoki.CustomHierarchy {
+namespace HananokiEditor.CustomHierarchy {
 	public class ComponentPopupWindow : HEditorWindow {
 
 		Action<bool> closeEvent;
@@ -90,15 +89,15 @@ namespace Hananoki.CustomHierarchy {
 			//editor.OnInspectorGUI();
 			if( UnityTypes.TMPro_TMP_Text != null && com.GetType().IsSubclassOf( UnityTypes.TMPro_TMP_Text ) ) {
 				var s = com.GetProperty<string>( "text" );
-				HGUIScope.Horizontal();
+				ScopeHorizontal.Begin();
 				if( GUILayout.Button( "#", GUILayout.ExpandWidth( false ) ) ) EditorHelper.SetGameObjectName( com, "#" );
 				if( GUILayout.Button( "##", GUILayout.ExpandWidth( false ) ) ) EditorHelper.SetGameObjectName( com, "##" );
 				if( GUILayout.Button( "Set GameObject Name" ) ) EditorHelper.SetGameObjectName( com );
-				HGUIScope.End();
+				ScopeHorizontal.End();
 
-				HGUIScope.Change();
+				ScopeChange.Begin();
 				s = EditorGUILayout.TextArea( s, EditorStyles.textField, GUILayout.Height( 20 * 3 ) );
-				if( HGUIScope.End() ) {
+				if( ScopeChange.End() ) {
 					com.SetProperty<string>( "text", s );
 					SceneView.RepaintAll();
 					//Debug.Log( typeof( Image ).AssemblyQualifiedName );
@@ -106,16 +105,16 @@ namespace Hananoki.CustomHierarchy {
 				}
 			}
 			if( UnityTypes.UnityEngine_UI_Image != null && com.GetType() == ( UnityTypes.UnityEngine_UI_Image ) ) {
-				HGUIScope.Horizontal();
+				ScopeHorizontal.Begin();
 				if( GUILayout.Button( "#", GUILayout.ExpandWidth( false ) ) ) EditorHelper.SetGameObjectName( com, "#" );
 					if( GUILayout.Button( "##", GUILayout.ExpandWidth( false ) ) ) EditorHelper.SetGameObjectName( com, "##" );
 					if( GUILayout.Button( "Set GameObject Name" ) ) EditorHelper.SetGameObjectName( com );
-				HGUIScope.End();
+				ScopeHorizontal.End();
 
 				var s = com.GetProperty<Sprite>( "sprite" );
-				HGUIScope.Change();
+				ScopeChange.Begin();
 				s = HEditorGUILayout.ObjectField<Sprite>( s );
-				if( HGUIScope.End() ) {
+				if( ScopeChange.End() ) {
 					com.SetProperty<Sprite>( "sprite", s );
 					SceneView.RepaintAll();
 					//Debug.Log( typeof( Image ).AssemblyQualifiedName );
@@ -123,16 +122,16 @@ namespace Hananoki.CustomHierarchy {
 				}
 			}
 			if( UnityTypes.UnityEngine_SpriteRenderer != null && com.GetType() == ( UnityTypes.UnityEngine_SpriteRenderer ) ) {
-				HGUIScope.Horizontal();
+				ScopeHorizontal.Begin();
 				if( GUILayout.Button( "#", GUILayout.ExpandWidth( false ) ) ) EditorHelper.SetGameObjectName( com, "#" );
 					if( GUILayout.Button( "##", GUILayout.ExpandWidth( false ) ) ) EditorHelper.SetGameObjectName( com, "##" );
 					if( GUILayout.Button( "Set GameObject Name" ) ) EditorHelper.SetGameObjectName( com );
-				HGUIScope.End();
+				ScopeHorizontal.End();
 
 				var s = com.GetProperty<Sprite>( "sprite" );
-				HGUIScope.Change();
+				ScopeChange.Begin();
 				s = HEditorGUILayout.ObjectField<Sprite>( s );
-				if( HGUIScope.End() ) {
+				if( ScopeChange.End() ) {
 					com.SetProperty<Sprite>( "sprite", s );
 					SceneView.RepaintAll();
 					//Debug.Log( typeof( Image ).AssemblyQualifiedName );

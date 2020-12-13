@@ -2,23 +2,20 @@
 
 //#define TEST
 
-using Hananoki.Extensions;
-using Hananoki.Reflection;
+using HananokiEditor.Extensions;
+using HananokiRuntime.Extensions;
 using System;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using UnityEditor.SceneManagement;
 
-using E = Hananoki.CustomHierarchy.SettingsEditor;
-using SS = Hananoki.SharedModule.S;
-using UnityObject = UnityEngine.Object;
+using E = HananokiEditor.CustomHierarchy.SettingsEditor;
 using PrefabOverridesWindow = UnityReflection.UnityEditorPrefabOverridesWindow;
+using SS = HananokiEditor.SharedModule.S;
 using UnityEditorSceneManagementEditorSceneManager = UnityReflection.UnityEditorSceneManagementEditorSceneManager;
 
 
-namespace Hananoki.CustomHierarchy {
+namespace HananokiEditor.CustomHierarchy {
 	[InitializeOnLoad]
 	public static class CustomHierarchy {
 
@@ -37,7 +34,7 @@ namespace Hananoki.CustomHierarchy {
 
 
 		static void OnDrawDockPane() {
-			HGUIScope.Horizontal();
+			ScopeHorizontal.Begin();
 			GUILayout.Space( 120 );
 
 			if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_animationwindow, SS._Animation ) ) {
@@ -57,7 +54,7 @@ namespace Hananoki.CustomHierarchy {
 			if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_profilerwindow, SS._Profiler ) ) {
 				HEditorWindow.ShowWindow( UnityTypes.UnityEditor_ProfilerWindow );
 			}
-			HGUIScope.End();
+			ScopeHorizontal.End();
 		}
 
 

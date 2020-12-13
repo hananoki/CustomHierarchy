@@ -1,10 +1,11 @@
 ﻿
 using UnityEditor;
 
-namespace Hananoki.CustomHierarchy {
+namespace HananokiEditor.CustomHierarchy {
   public static class Package {
     public const string name = "CustomHierarchy";
+    public const string nameNicify = "Custom Hierarchy";
     public const string editorPrefName = "Hananoki.CustomHierarchy";
-    public const string version = "0.6.8-preview";
+    public const string version = "0.6.9-preview";
   }
 }

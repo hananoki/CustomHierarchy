@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Hananoki.CustomHierarchy {
+namespace HananokiEditor.CustomHierarchy {
 	public class Styles {
 		public static Texture2D prefabNormal => s_styles.PrefabNormal;
 		public static Texture2D prefabModel => s_styles.PrefabModel;
