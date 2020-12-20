@@ -133,7 +133,7 @@ namespace HananokiEditor.CustomHierarchy {
 				//}
 				
 				if( E.i.toolbarOverride != _toolbarOverride ) {
-					CustomHierarchy._window = HEditorWindow.Find( UnityTypes.UnityEditor_SceneHierarchyWindow );
+					CustomHierarchy._window = EditorWindowUtils.Find( UnityTypes.UnityEditor_SceneHierarchyWindow );
 					E.i.toolbarOverride = _toolbarOverride;
 					if( E.i.toolbarOverride ) {
 						CustomHierarchy._window?.AddIMGUIContainer( CustomHierarchy._IMGUIContainer, true );

@@ -38,7 +38,7 @@ namespace HananokiEditor.CustomHierarchy {
 			GUILayout.Space( 120 );
 
 			if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_animationwindow, SS._Animation ) ) {
-				HEditorWindow.ShowWindow( UnityTypes.UnityEditor_AnimationWindow);
+				HEditorWindow.ShowWindow( UnityTypes.UnityEditor_AnimationWindow );
 			}
 			if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_graphs_animatorcontrollertool, SS._Animator ) ) {
 				HEditorWindow.ShowWindow( UnityTypes.UnityEditor_Graphs_AnimatorControllerTool );
@@ -58,6 +58,7 @@ namespace HananokiEditor.CustomHierarchy {
 		}
 
 
+		static GameObject go;
 
 		static void HierarchyWindowItemCallback( int instanceID, Rect selectionRect ) {
 
@@ -84,7 +85,7 @@ namespace HananokiEditor.CustomHierarchy {
 			if( _IMGUIContainer == null ) {
 				_IMGUIContainer = Activator.CreateInstance( UnityTypes.UnityEngine_UIElements_IMGUIContainer, new object[] { (Action) OnDrawDockPane } );
 				if( E.i.toolbarOverride ) {
-					_window = HEditorWindow.Find( UnityTypes.UnityEditor_SceneHierarchyWindow );
+					_window = EditorWindowUtils.Find( UnityTypes.UnityEditor_SceneHierarchyWindow );
 					_window?.AddIMGUIContainer( _IMGUIContainer, true );
 				}
 
@@ -119,7 +120,8 @@ namespace HananokiEditor.CustomHierarchy {
 				selectionRect.width -= 24;
 			}
 
-			var go = EditorUtility.InstanceIDToObject( instanceID ) as GameObject;
+			go = EditorUtility.InstanceIDToObject( instanceID ) as GameObject;
+
 			if( go == null ) {
 				var rr = selectionRect;
 				if( E.i.SceneIconClickPing ) {
@@ -142,6 +144,7 @@ namespace HananokiEditor.CustomHierarchy {
 				return;
 			}
 
+
 			if( E.i.enableLineColor ) {
 				DrawBackColor( selectionRect, 0x01 );
 			}
@@ -158,9 +161,9 @@ namespace HananokiEditor.CustomHierarchy {
 
 
 			rc.x = max;
-			//#if LOCAL_DEBUG
 			rc.x -= E.i.offsetPosX;
-			//#endif
+
+
 			if( E.i.activeToggle ) {
 				rc.x = rc.x - WIDTH;
 				DrawActiveButtonGUI( go, rc );
@@ -264,59 +267,8 @@ namespace HananokiEditor.CustomHierarchy {
 				//EditorGUI.DrawRect( selectionRect ,new Color(0,0,1,0.25f));
 			}
 
-			if( E.i.miniInspector ) {
-				{//textmeshpro
-					go.InvokeComponentFromType( UnityTypes.TMPro_TMP_Text, textmeshpro );
-					void textmeshpro( Component comp ) {
-						rc = selectionRect;
-						//rc.x += 100;
-						//comp.GetCachedIcon
-						var pos = EditorStyles.label.CalcSize( EditorHelper.TempContent( go.name ) );
-						rc.x += pos.x + 20;
-						rc.width = 16;
+			if( E.i.miniInspector ) MiniInspector( selectionRect );
 
-						GUI.Label( rc, EditorHelper.TempContent( EditorGUIUtility.ObjectContent( comp, UnityTypes.TMPro_TMP_Text ).image ) );
-						if( EditorHelper.HasMouseClick( rc ) ) {
-							ComponentPopupWindow.Open( comp, ( b ) => { } );
-							Event.current.Use();
-						}
-					}
-				}
-				{//image
-					go.InvokeComponentFromType( UnityTypes.UnityEngine_UI_Image, image );
-					void image( Component comp ) {
-						rc = selectionRect;
-						//rc.x += 100;
-						//comp.GetCachedIcon
-						var pos = EditorStyles.label.CalcSize( EditorHelper.TempContent( go.name ) );
-						rc.x += pos.x + 20;
-						rc.width = 16;
-
-						GUI.Label( rc, EditorHelper.TempContent( EditorGUIUtility.ObjectContent( comp, UnityTypes.UnityEngine_UI_Image ).image ) );
-						if( EditorHelper.HasMouseClick( rc ) ) {
-							ComponentPopupWindow.Open( comp, ( b ) => { } );
-							Event.current.Use();
-						}
-					}
-				}
-				{//spriteRenderer
-					go.InvokeComponentFromType( UnityTypes.UnityEngine_SpriteRenderer, spriteRenderer );
-					void spriteRenderer( Component comp ) {
-						rc = selectionRect;
-						//rc.x += 100;
-						//comp.GetCachedIcon
-						var pos = EditorStyles.label.CalcSize( EditorHelper.TempContent( go.name ) );
-						rc.x += pos.x + 20;
-						rc.width = 16;
-
-						GUI.Label( rc, EditorHelper.TempContent( EditorGUIUtility.ObjectContent( comp, UnityTypes.UnityEngine_SpriteRenderer ).image ) );
-						if( EditorHelper.HasMouseClick( rc ) ) {
-							ComponentPopupWindow.Open( comp, ( b ) => { } );
-							Event.current.Use();
-						}
-					}
-				}
-			}
 
 #if false
 			if( PreferenceSettings.i.EnableHierarchyItem ) {
@@ -388,6 +340,60 @@ namespace HananokiEditor.CustomHierarchy {
 		}
 
 
+
+		static void MiniInspector( Rect selectionRect ) {
+
+			var rc = selectionRect;
+
+			{//textmeshpro
+				go.InvokeComponentFromType( UnityTypes.TMPro_TMP_Text, textmeshpro );
+				void textmeshpro( Component comp ) {
+					//rc.x += 100;
+					//comp.GetCachedIcon
+					var pos = EditorStyles.label.CalcSize( EditorHelper.TempContent( go.name ) );
+					rc.x += pos.x + 20;
+					rc.width = 16;
+
+					GUI.Label( rc, EditorHelper.TempContent( EditorGUIUtility.ObjectContent( comp, UnityTypes.TMPro_TMP_Text ).image ) );
+					if( EditorHelper.HasMouseClick( rc ) ) {
+						ComponentPopupWindow.Open( comp, ( b ) => { } );
+						Event.current.Use();
+					}
+				}
+			}
+			{//image
+				go.InvokeComponentFromType( UnityTypes.UnityEngine_UI_Image, image );
+				void image( Component comp ) {
+					//rc.x += 100;
+					//comp.GetCachedIcon
+					var pos = EditorStyles.label.CalcSize( EditorHelper.TempContent( go.name ) );
+					rc.x += pos.x + 20;
+					rc.width = 16;
+
+					GUI.Label( rc, EditorHelper.TempContent( EditorGUIUtility.ObjectContent( comp, UnityTypes.UnityEngine_UI_Image ).image ) );
+					if( EditorHelper.HasMouseClick( rc ) ) {
+						ComponentPopupWindow.Open( comp, ( b ) => { } );
+						Event.current.Use();
+					}
+				}
+			}
+			{//spriteRenderer
+				go.InvokeComponentFromType( UnityTypes.UnityEngine_SpriteRenderer, spriteRenderer );
+				void spriteRenderer( Component comp ) {
+					var spr = (SpriteRenderer) comp;
+					var icon = spr.sprite.GetCachedIcon();
+					var pos = go.name.CalcSizeFromLabel();
+					rc.x += pos.x + 20;
+					rc.width = 16;
+
+					GUI.DrawTexture( rc, icon == null ? EditorIcon.icons_processed_unityengine_spriterenderer_icon_asset : icon );
+					if( EditorHelper.HasMouseClick( rc ) ) {
+						ComponentPopupWindow.Open( comp, ( b ) => { } );
+						Event.current.Use();
+					}
+				}
+			}
+		}
 
 		static void DrawBackColor( Rect selectionRect, int mask ) {
 			//if( _SimaSima == false ) return;

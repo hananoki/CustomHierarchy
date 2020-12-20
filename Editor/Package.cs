@@ -6,6 +6,6 @@ namespace HananokiEditor.CustomHierarchy {
     public const string name = "CustomHierarchy";
     public const string nameNicify = "Custom Hierarchy";
     public const string editorPrefName = "Hananoki.CustomHierarchy";
-    public const string version = "0.6.9-preview";
+    public const string version = "0.6.10-preview";
   }
 }
