@@ -1,5 +1,12 @@
 # Custom Hierarchy
 
+## [0.6.11] - 2021-02-07
+- SharedModule v1.7.5 or later
+
+### Added
+- Enabled to change Raycast Target in Mini Inspector
+- ReflectionProbe, Bake button added
+
 ## [0.6.10] - 2020-12-20
 - SharedModule v1.7.4 or later
 

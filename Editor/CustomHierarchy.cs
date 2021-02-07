@@ -8,6 +8,7 @@ using System;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityReflection;
 
 using E = HananokiEditor.CustomHierarchy.SettingsEditor;
 using PrefabOverridesWindow = UnityReflection.UnityEditorPrefabOverridesWindow;
@@ -221,14 +222,14 @@ namespace HananokiEditor.CustomHierarchy {
 					//	Undo.SetTransformParent( gobj.transform, gobj.transform.parent.parent, "" );
 					//	EditorUtility.SetDirty( gobj );
 					//}, go );
-					//#if LOCAL_TEST
-					//					m.AddItem( "Hide", false, _uobj => {
-					//						var gobj = _uobj as GameObject;
-					//						gobj.hideFlags |= HideFlags.HideInHierarchy;
-					//						EditorUtility.SetDirty( gobj );
-					//						EditorApplication.RepaintHierarchyWindow();
-					//					}, go );
-					//#endif
+#if LOCAL_TEST
+					m.AddItem( "Hide", false, _uobj => {
+						var gobj = _uobj as GameObject;
+						gobj.hideFlags |= HideFlags.HideInHierarchy;
+						EditorUtility.SetDirty( gobj );
+						EditorApplication.RepaintHierarchyWindow();
+					}, go );
+#endif
 					m.DropDown( r );
 					Event.current.Use();
 				}
@@ -344,6 +345,28 @@ namespace HananokiEditor.CustomHierarchy {
 		static void MiniInspector( Rect selectionRect ) {
 
 			var rc = selectionRect;
+
+			{
+				go.InvokeComponentFromType( typeof(ReflectionProbe), textmeshpro );
+				void textmeshpro( Component comp ) {
+					//rc.x += 100;
+					//comp.GetCachedIcon
+					var pos = go.name.CalcSizeFromLabel();
+					rc.x += pos.x + 20;
+					rc.width = 16;
+
+					GUI.DrawTexture( rc, EditorIcon.icons_processed_unityengine_reflectionprobe_icon_asset );
+					if( EditorHelper.HasMouseClick( rc ) ) {
+						//ComponentPopupWindow.Open( comp, ( b ) => { } );
+						//Event.current.Use();
+					}
+					rc.x += rc.width+8;
+					rc.width = 40;
+					if( GUI.Button( rc, EditorHelper.TempContent( "Bake", EditorIcon.icons_processed_unityengine_reflectionprobe_icon_asset ) ) ) {
+						UnityEditorLightmapping.BakeReflectionProbeSnapshot((ReflectionProbe) comp );
+					}
+				}
+			}
 
 			{//textmeshpro
 				go.InvokeComponentFromType( UnityTypes.TMPro_TMP_Text, textmeshpro );
