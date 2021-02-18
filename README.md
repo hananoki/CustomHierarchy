@@ -9,7 +9,7 @@
 ## Overview
 - A simple customized hierarchy
 
-  ![](Documentation~/Preview.gif)
+  ![](Documentation~/Preview.png)
 
 ## Installation
 - Add following lines to the `dependencies` section of the `Packages/manifest.json`.
@@ -22,7 +22,7 @@
 ```
 
 ## Requirement
-[![](https://img.shields.io/badge/SharedModule-v1.7.5%20or%20later-blue.svg)](https://github.com/hananoki/SharedModule)
+[![](https://img.shields.io/badge/SharedModule-v1.7.6%20or%20later-blue.svg)](https://github.com/hananoki/SharedModule)
 
 ## Licence
 [MIT](https://github.com/hananoki/CustomHierarchy/blob/master/LICENSE.md)

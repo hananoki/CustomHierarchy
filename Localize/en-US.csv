@@ -1,4 +1,4 @@
-﻿Show toggle to toggle game object active
+Show toggle to toggle game object active
 Display prefab status with icons
 Move up one level
 Ping a scene file by clicking the scene icon
@@ -6,3 +6,7 @@ Display tag name and layer name
 Display the tree
 Item display offset X
 Numpad Control
+Apply All
+Revert All
+Hide GameObject
+Unhide GameObject

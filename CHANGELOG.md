@@ -1,5 +1,15 @@
 # Custom Hierarchy
 
+## [0.7.0] - 2021-02-19
+- SharedModule v1.7.6 or later
+
+### Added
+- Added processing related to components
+- Added GameObject delete button
+- Added object creation shortcut to dock pane
+- Added command toolbar
+- Add language file
+
 ## [0.6.11] - 2021-02-07
 - SharedModule v1.7.5 or later
 

@@ -1,37 +1,93 @@
-﻿#define ENABLE_HANANOKI_SETTINGS
-
+﻿using HananokiRuntime.Extensions;
+using System.Collections.Generic;
+using System;
 using UnityEditor;
 using UnityEngine;
-using HananokiEditor.Extensions;
-using HananokiEditor.SharedModule;
-
 using E = HananokiEditor.CustomHierarchy.SettingsEditor;
-using SS = HananokiEditor.SharedModule.S;
 
 namespace HananokiEditor.CustomHierarchy {
 	[System.Serializable]
 	public class SettingsEditor {
+
+		public int flag;
+
+		const int DOCKPANE_BAR = ( 1 << 0 );
+		const int COMMAND_BAR = ( 1 << 1 );
+		const int ICON_CLICK_CONTEXT = ( 1 << 2 );
+		const int COMPONENT_HANDLER = ( 1 << 3 );
+		const int ACTIVE_TOGGLE = ( 1 << 4 );
+		const int PREFAB_STATUS = ( 1 << 5 );
+		const int TREE_LINE = ( 1 << 6 );
+		const int SHOW_LAYER_AND_TAG = ( 1 << 7 );
+		const int NUMPAD_CTRL = ( 1 << 8 );
+		const int SCENE_ICON_CLICK_PING = ( 1 << 9 );
+		const int REMOVE_GAME_OBJECT = ( 1 << 10 );
+		const int ENABLE_LINE_COLOR = ( 1 << 11 );
+
+		public bool dockPaneBar {
+			get => flag.Has( DOCKPANE_BAR );
+			set => flag.Toggle( DOCKPANE_BAR, value );
+		}
+		public bool commandBar {
+			get => flag.Has( COMMAND_BAR );
+			set => flag.Toggle( COMMAND_BAR, value );
+		}
+		public bool iconClickContext {
+			get => flag.Has( ICON_CLICK_CONTEXT );
+			set => flag.Toggle( ICON_CLICK_CONTEXT, value );
+		}
+		public bool componentHandler {
+			get => flag.Has( COMPONENT_HANDLER );
+			set => flag.Toggle( COMPONENT_HANDLER, value );
+		}
+		public bool activeToggle {
+			get => flag.Has( ACTIVE_TOGGLE );
+			set => flag.Toggle( ACTIVE_TOGGLE, value );
+		}
+		public bool prefabStatus {
+			get => flag.Has( PREFAB_STATUS );
+			set => flag.Toggle( PREFAB_STATUS, value );
+		}
+		public bool enableTreeImg {
+			get => flag.Has( TREE_LINE );
+			set => flag.Toggle( TREE_LINE, value );
+		}
+		public bool showLayerAndTag {
+			get => flag.Has( SHOW_LAYER_AND_TAG );
+			set => flag.Toggle( SHOW_LAYER_AND_TAG, value );
+		}
+		public bool numpadCtrl {
+			get => flag.Has( NUMPAD_CTRL );
+			set => flag.Toggle( NUMPAD_CTRL, value );
+		}
+		public bool sceneIconClickPing {
+			get => flag.Has( SCENE_ICON_CLICK_PING );
+			set => flag.Toggle( SCENE_ICON_CLICK_PING, value );
+		}
+		public bool removeGameObject {
+			get => flag.Has( REMOVE_GAME_OBJECT );
+			set => flag.Toggle( REMOVE_GAME_OBJECT, value );
+		}
+		public bool enableLineColor {
+			get => flag.Has( ENABLE_LINE_COLOR );
+			set => flag.Toggle( ENABLE_LINE_COLOR, value );
+		}
+
 		public bool Enable = true;
 
-		public bool activeToggle = true;
-		public bool prefabStatus = true;
-		public bool enableTreeImg = true;
 
-		public bool enableLineColor = true;
 		public Color lineColorPersonal = new Color( 0, 0, 0, 0.05f );
 		public Color lineColorProfessional = new Color( 1, 1, 1, 0.05f );
 
-		public bool IconClickContext;
-		public bool SceneIconClickPing;
-		public bool showLayerAndTag;
-		
 		public float offsetPosX;
-		
+
 		public bool toolbarOverride;
-		public bool numpadCtrl;
-		public bool miniInspector;
+
+		public List<ComponentHandlerData> m_componentHandlerData;
+
 
 		public static E i;
+
 
 		public Color lineColor {
 			get {
@@ -43,151 +99,36 @@ namespace HananokiEditor.CustomHierarchy {
 			}
 		}
 
+
 		public static void Load() {
 			if( i != null ) return;
 			i = EditorPrefJson<E>.Get( Package.editorPrefName );
 		}
 
 
-
 		public static void Save() {
 			EditorPrefJson<E>.Set( Package.editorPrefName, i );
 		}
-	}
 
-
-
-	public class SettingsEditorWindow : HSettingsEditorWindow {
-			
-		public static void Open() {
-			var w = GetWindow<SettingsEditorWindow>();
-			w.SetTitle( new GUIContent( "Project Settings", EditorIcon.settings ) );
-			w.headerMame = Package.name;
-			w.headerVersion = Package.version;
-			w.gui = DrawGUI;
-		}
-
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public static void DrawGUI() {
-			E.Load();
-			EditorGUI.BeginChangeCheck();
-
-			/* アイコン消しテスト、コンテキストメニューと競合する
-			if( GUILayout.Button( "aaa" ) ) {
-				object a = R.Field( "s_LastInteractedHierarchy", "UnityEditor.SceneHierarchyWindow" ).GetValue( null );
-				var sceneHierarchy = a.Property<object>( "sceneHierarchy" );
-				var treeView = sceneHierarchy.Property<object>( "treeView" );
-				var gui = treeView.Property<object>( "gui" );
-
-				gui.Field( "k_IconWidth", 0 );
-				
-				Debug.Log( a.GetType().Name );
-			}
-			*/
-
-
-			E.i.Enable = HEditorGUILayout.ToggleLeft( SS._Enable, E.i.Enable );
-			EditorGUI.indentLevel++;
-			GUILayout.Space( 8f );
-
-			bool _toolbarOverride;
-			using( new EditorGUI.DisabledGroupScope( !E.i.Enable ) ) {
-
-				E.i.enableTreeImg = HEditorGUILayout.ToggleLeft( S._Displaythetree, E.i.enableTreeImg );
-				E.i.activeToggle = HEditorGUILayout.ToggleLeft( S._Showtoggletotogglegameobjectactive, E.i.activeToggle );
-				E.i.prefabStatus = HEditorGUILayout.ToggleLeft( S._Displayprefabstatuswithicons, E.i.prefabStatus );
-				//Settings.i.HierarchyAnim = EditorGUILayout.ToggleLeft( "Monitor for Animation Curve", Settings.i.HierarchyAnim, GUILayout.ExpandWidth( false ) );
-
-				E.i.enableLineColor = HEditorGUILayout.ToggleLeft( SS._Changecolorforeachrow, E.i.enableLineColor );
-
-				using( new EditorGUI.DisabledGroupScope( !E.i.enableLineColor ) ) {
-					EditorGUI.indentLevel++;
-					E.i.lineColor = EditorGUILayout.ColorField( SS._Rowcolor, E.i.lineColor );
-					EditorGUI.indentLevel--;
+		public static bool HasInspecClass( Type t ) {
+			foreach( var p in i.m_componentHandlerData ) {
+				if( p.type == t ) {
+					if( p.inspector ) return true;
 				}
-				//#if LOCAL_DEBUG
-				E.i.offsetPosX = EditorGUILayout.FloatField( S._ItemdisplayoffsetX, E.i.offsetPosX );
-				//#endif
-
-				GUILayout.Space( 8f );
-				HEditorGUILayout.HeaderTitle( $"* {SS._Experimental}"/*, EditorStyles.boldLabel*/ );
-				E.i.IconClickContext = HEditorGUILayout.ToggleLeft( SS._ContextMenuWithIconClick, E.i.IconClickContext );
-				E.i.SceneIconClickPing = HEditorGUILayout.ToggleLeft( S._Pingascenefilebyclickingthesceneicon, E.i.SceneIconClickPing );
-				E.i.showLayerAndTag = HEditorGUILayout.ToggleLeft( S._Displaytagnameandlayername, E.i.showLayerAndTag );
-
-				_toolbarOverride = HEditorGUILayout.ToggleLeft( "Toolbar Override (UNITY_2019_3_OR_NEWER)", E.i.toolbarOverride );
-				E.i.numpadCtrl = HEditorGUILayout.ToggleLeft( S._NumpadControl, E.i.numpadCtrl );
-				E.i.miniInspector = HEditorGUILayout.ToggleLeft( "MiniInspector", E.i.miniInspector );
-				
 			}
-			EditorGUI.indentLevel--;
-
-
-			if( EditorGUI.EndChangeCheck() ) {
-				
-				//if( CustomHierarchy.s_styles != null ) {
-				//	CustomHierarchy.s_styles.lineColor = E.i.lineColor;
-				//}
-				
-				if( E.i.toolbarOverride != _toolbarOverride ) {
-					CustomHierarchy._window = EditorWindowUtils.Find( UnityTypes.UnityEditor_SceneHierarchyWindow );
-					E.i.toolbarOverride = _toolbarOverride;
-					if( E.i.toolbarOverride ) {
-						CustomHierarchy._window?.AddIMGUIContainer( CustomHierarchy._IMGUIContainer, true );
-					}
-					else {
-						CustomHierarchy._window?.RemoveIMGUIContainer( CustomHierarchy._IMGUIContainer, true );
-					}
-				}
-				E.Save();
-				EditorApplication.RepaintHierarchyWindow();
-			}
-
-			GUILayout.Space( 8f );
-
+			return false;
 		}
-
-
-
-
-#if !ENABLE_HANANOKI_SETTINGS
-#if UNITY_2018_3_OR_NEWER && !ENABLE_LEGACY_PREFERENCE
-		
-		[SettingsProvider]
-		public static SettingsProvider PreferenceView() {
-			var provider = new SettingsProvider( $"Preferences/Hananoki/{Package.name}", SettingsScope.User ) {
-				label = $"{Package.name}",
-				guiHandler = PreferencesGUI,
-				titleBarGuiHandler = () => GUILayout.Label( $"{Package.version}", EditorStyles.miniLabel ),
-			};
-			return provider;
-		}
-		public static void PreferencesGUI( string searchText ) {
-#else
-		[PreferenceItem( Package.name )]
-		public static void PreferencesGUI() {
-#endif
-			using( new LayoutScope() ) DrawGUI();
-		}
-#endif
 	}
 
 
 
-#if ENABLE_HANANOKI_SETTINGS
-	public class SettingsEvent {
-		[HananokiSettingsRegister]
-		public static SettingsItem RegisterSettings() {
-			return new SettingsItem() {
-				//mode = 1,
-				displayName = Package.nameNicify,
-				version = Package.version,
-				gui = SettingsEditorWindow.DrawGUI,
-			};
-		}
-	}
-#endif
+	//public class SettingsEditorWindow : HSettingsEditorWindow {
+	//	public static void Open() {
+	//		var w = GetWindow<SettingsEditorWindow>();
+	//		w.SetTitle( new GUIContent( "Project Settings", EditorIcon.settings ) );
+	//		w.headerMame = Package.name;
+	//		w.headerVersion = Package.version;
+	//		w.gui = SettingsDrawer.DrawGUI;
+	//	}
+	//}
 }

@@ -20,6 +20,10 @@ namespace HananokiEditor.CustomHierarchy {
 		public static string _Displaythetree => L.Tr( 5 );
 		public static string _ItemdisplayoffsetX => L.Tr( 6 );
 		public static string _NumpadControl => L.Tr( 7 );
+		public static string _ApplyAll => L.Tr( 8 );
+		public static string _RevertAll => L.Tr( 9 );
+		public static string _HideGameObject => L.Tr( 10 );
+		public static string _UnhideGameObject => L.Tr( 11 );
 	}
 
 #if UNITY_EDITOR
