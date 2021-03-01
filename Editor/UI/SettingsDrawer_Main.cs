@@ -69,6 +69,7 @@ namespace HananokiEditor.CustomHierarchy {
 				GUILayout.Space( 8f );
 				HEditorGUILayout.HeaderTitle( $"* {SS._Experimental}"/*, EditorStyles.boldLabel*/ );
 				
+				E.i.extendedDragAndDrop = HEditorGUILayout.ToggleLeft( "Extended Drag And Drop", E.i.extendedDragAndDrop );
 				E.i.componentHandler = HEditorGUILayout.ToggleLeft( "Component Handler", E.i.componentHandler );
 				E.i.removeGameObject = HEditorGUILayout.ToggleLeft( "Remove GameObject", E.i.removeGameObject );
 

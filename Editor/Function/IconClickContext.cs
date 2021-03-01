@@ -17,25 +17,7 @@ namespace HananokiEditor.CustomHierarchy {
 			var m = new GenericMenu();
 			m.AddItem( SS._OpenInNewInspector, EditorContextHandler.ShowNewInspectorWindow, CustomHierarchy.go );
 			m.AddItem( S._HideGameObject, _Hide, CustomHierarchy.go );
-
-			if( E.i.componentHandler ) {
-				if( ComponentHandler.hasTextMeshPro ) {
-					var tmp = "Window/TextMeshPro/Font Asset Creator";
-					if( EditorHelper.HasMenuItem( tmp ) ) {
-						m.AddSeparator();
-						m.AddItem( tmp.FileNameWithoutExtension(), () => EditorApplication.ExecuteMenuItem( tmp ) );
-					}
-				}
-				else if( ComponentHandler.hasRawImage ) {
-					m.AddSeparator();
-					if( ComponentHandler.rawImage.texture == null ) {
-						m.AddDisabledItem( "テクスチャの場所を開く" );
-					}
-					else {
-						m.AddItem( $"テクスチャの場所を開く", ( context ) => EditorHelper.PingObject( context ), ComponentHandler.rawImage.texture );
-					}
-				}
-			}
+			m.AddItem( "DontDestroyOnLoad", _DontDestroyOnLoad, CustomHierarchy.go );
 
 			var status = UnityEditorPrefabUtility.GetPrefabInstanceStatus( CustomHierarchy.go );
 			if( status == PrefabInstanceStatus.Connected ) {
@@ -56,6 +38,10 @@ namespace HananokiEditor.CustomHierarchy {
 			m.DropDownPopupRect( rect );
 		}
 
+		static void _DontDestroyOnLoad( object context ) {
+			var gobj = context as GameObject;
+			Object.DontDestroyOnLoad( gobj );
+		}
 
 		static void _Hide( object context ) {
 			var gobj = context as GameObject;

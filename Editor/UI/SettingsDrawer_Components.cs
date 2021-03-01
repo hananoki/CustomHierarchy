@@ -40,7 +40,10 @@ namespace HananokiEditor.CustomHierarchy {
 
 			HGUIToolbar.Begin();
 			HGUIToolbar.DropDown( EditorIcon.toolbar_plus, () => {
-				var ppp = AssemblieUtils.SubclassesOf( typeof( Component ) ).OrderBy( x => x.Assembly.FullName );
+				var ppp = AssemblieUtils
+				.SubclassesOf( typeof( Component ) )
+				.OrderBy( x => x.Assembly.FullName )
+				.ThenBy( x => x.FullName );
 				var m = new GenericMenu();
 				m.AddItem( SS._ReturnToDefault, () => {
 					var tt = new List<ComponentHandlerData>();

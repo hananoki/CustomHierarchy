@@ -23,6 +23,7 @@ namespace HananokiEditor.CustomHierarchy {
 		const int SCENE_ICON_CLICK_PING = ( 1 << 9 );
 		const int REMOVE_GAME_OBJECT = ( 1 << 10 );
 		const int ENABLE_LINE_COLOR = ( 1 << 11 );
+		const int EXTEND_DD = ( 1 << 12 );
 
 		public bool dockPaneBar {
 			get => flag.Has( DOCKPANE_BAR );
@@ -72,6 +73,11 @@ namespace HananokiEditor.CustomHierarchy {
 			get => flag.Has( ENABLE_LINE_COLOR );
 			set => flag.Toggle( ENABLE_LINE_COLOR, value );
 		}
+		public bool extendedDragAndDrop {
+			get => flag.Has( EXTEND_DD );
+			set => flag.Toggle( EXTEND_DD, value );
+		}
+
 
 		public bool Enable = true;
 
@@ -84,7 +90,7 @@ namespace HananokiEditor.CustomHierarchy {
 		public bool toolbarOverride;
 
 		public List<ComponentHandlerData> m_componentHandlerData;
-
+		public List<MenuCommandData> m_menuCommandData;
 
 		public static E i;
 

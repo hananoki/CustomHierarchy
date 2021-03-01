@@ -1,5 +1,15 @@
 # Custom Hierarchy
 
+## [0.7.1] - 2021-03-01
+- SharedModule v1.7.6 or later
+
+### Added
+- The URP conversion function has been added to the Material Editor.
+
+### Changed
+- Component tools have been redesigned to be customizable.
+- Drag-and-drop function can now be turned on and off.
+
 ## [0.7.0] - 2021-02-19
 - SharedModule v1.7.6 or later
 

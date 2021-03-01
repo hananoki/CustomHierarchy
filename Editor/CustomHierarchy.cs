@@ -1,7 +1,5 @@
 ﻿#pragma warning disable 618
 
-#define TEST
-
 using System.Collections.Generic;
 using HananokiEditor.Extensions;
 using HananokiRuntime.Extensions;
@@ -12,6 +10,7 @@ using UnityEditor.SceneManagement;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityReflection;
+using System.Collections;
 
 using E = HananokiEditor.CustomHierarchy.SettingsEditor;
 using PrefabOverridesWindow = UnityReflection.UnityEditorPrefabOverridesWindow;
@@ -20,6 +19,8 @@ using UnityEditorSceneManagementEditorSceneManager = UnityReflection.UnityEditor
 
 
 namespace HananokiEditor.CustomHierarchy {
+	
+
 	[InitializeOnLoad]
 	public static partial class CustomHierarchy {
 
@@ -31,7 +32,7 @@ namespace HananokiEditor.CustomHierarchy {
 		static bool init;
 		internal static GameObject go;
 
-		static HashSet<Rect> m_rects = new HashSet<Rect>();
+		
 
 		static CustomHierarchy() {
 			E.Load();
@@ -40,12 +41,13 @@ namespace HananokiEditor.CustomHierarchy {
 			EditorSceneManager.sceneOpened += ( scene, mode ) => {
 				ComponentHandler.Reset();
 			};
+			ComponentHandler.Reset();
 			EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
 		}
 
 
 		static void OnHierarchyChanged() {
-			m_rects.Clear();
+			DragAndDropEx.OnHierarchyChanged();
 		}
 
 
@@ -59,36 +61,6 @@ namespace HananokiEditor.CustomHierarchy {
 		}
 
 
-		static void DD( Rect rect ) {
-			// 通常のスクリプトアタッチを邪魔しないようにする.
-			if( m_rects.Add( rect ) ) return;
-			if( m_rects.Any( x => x.Contains( Event.current.mousePosition ) ) ) return;
-
-			if( DragAndDrop.objectReferences == null ) return;
-			if( DragAndDrop.objectReferences.Length == 0 ) return;
-
-			var tt = DragAndDrop.objectReferences
-				.OfType<MonoScript>()
-				.Select( x => x.GetClass() )
-				//.Where( x => x.IsSubclassOf( typeof( MonoBehaviour ) ) )
-				.Where( x => typeof( MonoBehaviour ).IsAssignableFrom( x ) )
-				.ToArray();
-
-			if( tt.Length == 0 ) return;
-
-			DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
-			if( Event.current.type != EventType.DragPerform ) return;
-
-			var gobj = new GameObject( tt[ 0 ].Name );
-			foreach( var t in tt ) {
-				gobj.AddComponent( t );
-			}
-			Undo.RegisterCreatedObjectUndo( gobj, $"new GameObject( \"{tt[ 0 ].Name}\" )" );
-
-			DragAndDrop.AcceptDrag();
-			Event.current.Use();
-		}
-
 
 		static void HierarchyWindowItemCallback( int instanceID, Rect selectionRect ) {
 			//Debug.Log( selectionRect );
@@ -96,7 +68,7 @@ namespace HananokiEditor.CustomHierarchy {
 
 			Styles.Init();
 
-			DD( selectionRect );
+			if( E.i.extendedDragAndDrop ) DragAndDropEx.Execute( selectionRect );
 
 			if( E.i.dockPaneBar ) DockPaneBar.Setup();
 			if( E.i.commandBar ) CommandBar.Setup();

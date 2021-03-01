@@ -36,5 +36,12 @@ namespace HananokiEditor.CustomHierarchy {
 			assemblyQualifiedName = t.AssemblyQualifiedName;
 		}
 	}
+
+
+	[System.Serializable]
+	public class MenuCommandData {
+		public string menuItem;
+	}
+
 }
 

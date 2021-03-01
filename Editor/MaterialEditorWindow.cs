@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using HananokiEditor.Extensions;
 
 namespace HananokiEditor.CustomHierarchy {
 	public class MaterialEditorWindow : HNEditorWindow<MaterialEditorWindow> {
@@ -23,6 +24,33 @@ namespace HananokiEditor.CustomHierarchy {
 
 			EditorGUIUtility.hierarchyMode = true;
 			EditorGUIUtility.wideMode = true;
+
+			HGUIToolbar.Begin();
+			if( HGUIToolbar.DropDown( "URP" ) ) {
+				ShaderInfo[] allShaderInfo = ShaderUtil.GetAllShaderInfo();
+				var m = new GenericMenu();
+				foreach( var p in allShaderInfo ) {
+					if( p.name.StartsWith( "Hidden" ) ) continue;
+					if( p.name.Contains( "Universal Render Pipeline" ) ) {
+						//Debug.Log( p.name );
+						m.AddItem( p.name.Replace( "Universal Render Pipeline/", "" ), ( context ) => {
+							EditorHelper.Dirty( m_material, ()=> {
+								var _MainTex = m_material.GetTexture( "_MainTex" );
+								var _TintColor = m_material.GetColor( "_TintColor" );
+								//Debug.Log( m_material.mainTexture.name );
+								m_material.shader = Shader.Find( (string) context ); ;
+
+								m_material.SetTexture( "_BaseMap", _MainTex );
+								m_material.SetColor( "_BaseColor", _TintColor );
+							} );
+						}, p.name );
+					}
+				}
+				m.DropDown( HEditorGUI.lastRect );
+				//m_material.shader = Shader.Find( "Universal Render Pipeline/Lit" ); ;
+			}
+			GUILayout.FlexibleSpace();
+			HGUIToolbar.End();
 
 			ScopeHorizontal.Begin();
 			m_currentEditor?.DrawHeader();
