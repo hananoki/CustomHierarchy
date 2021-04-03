@@ -3,8 +3,6 @@ using HananokiEditor.Extensions;
 using UnityEditor;
 using UnityEngine;
 using UnityReflection;
-
-using E = HananokiEditor.CustomHierarchy.SettingsEditor;
 using SS = HananokiEditor.SharedModule.S;
 
 namespace HananokiEditor.CustomHierarchy {

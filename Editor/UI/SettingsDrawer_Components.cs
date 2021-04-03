@@ -1,20 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine;
-using HananokiEditor.Extensions;
+﻿using HananokiEditor.Extensions;
 using HananokiEditor.SharedModule;
-using UnityEditor;
-using UnityEngine;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEditorInternal;
-using UnityEngine;
-using HananokiRuntime.Extensions;
 using HananokiRuntime;
-using HananokiEditor.SharedModule;
-using UnityReflection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.UI;
 using E = HananokiEditor.CustomHierarchy.SettingsEditor;
 using SS = HananokiEditor.SharedModule.S;
@@ -79,7 +70,7 @@ namespace HananokiEditor.CustomHierarchy {
 			HGUIToolbar.End();
 
 			Helper.New( ref m_treeview );
-			
+
 			//////////////////
 			using( new GUILayoutScope( 1, 0 ) ) {
 				m_treeview.DrawLayoutGUI();

@@ -10,3 +10,5 @@
 すべてを元に戻す
 GameObjectを非表示にする
 GameObjectの非表示を解除する
+コンポーネントハンドラー
+GameObject 削除ボタン

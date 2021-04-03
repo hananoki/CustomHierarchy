@@ -1,39 +1,31 @@
 ﻿#pragma warning disable 618
 
-using System.Collections.Generic;
 using HananokiEditor.Extensions;
 using HananokiRuntime.Extensions;
-using System;
-using System.Linq;
 using UnityEditor;
+using UnityEditor.Experimental.SceneManagement;
 using UnityEditor.SceneManagement;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityReflection;
-using System.Collections;
-
 using E = HananokiEditor.CustomHierarchy.SettingsEditor;
-using PrefabOverridesWindow = UnityReflection.UnityEditorPrefabOverridesWindow;
-using SS = HananokiEditor.SharedModule.S;
 using UnityEditorSceneManagementEditorSceneManager = UnityReflection.UnityEditorSceneManagementEditorSceneManager;
 
 
 namespace HananokiEditor.CustomHierarchy {
-	
+
 
 	[InitializeOnLoad]
 	public static partial class CustomHierarchy {
 
 		const int WIDTH = 16;
 
-		internal static EditorWindow _window;
-		internal static object _IMGUIContainer;
-
 		static bool init;
 		internal static GameObject go;
 
-		
+		internal static bool initSelection;
 
+		/////////////////////////////////////////
 		static CustomHierarchy() {
 			E.Load();
 			EditorApplication.hierarchyWindowItemOnGUI += HierarchyWindowItemCallback;
@@ -46,11 +38,16 @@ namespace HananokiEditor.CustomHierarchy {
 		}
 
 
+
+		/////////////////////////////////////////
 		static void OnHierarchyChanged() {
 			DragAndDropEx.OnHierarchyChanged();
+			ComponentHandler.Reset();
 		}
 
 
+
+		/////////////////////////////////////////
 		static void OnPlayModeStateChanged( PlayModeStateChange playModeStateChange ) {
 			switch( playModeStateChange ) {
 			case PlayModeStateChange.EnteredPlayMode:
@@ -61,12 +58,26 @@ namespace HananokiEditor.CustomHierarchy {
 		}
 
 
+		/////////////////////////////////////////
+		static void ヒエラルキークリックでインスペクターFocus() {
+			if( !AssetDatabase.GetAssetOrScenePath( Selection.activeObject ).Contains( ".unity" ) ) return;
 
+			EditorWindowUtils.FocusInspector();
+		}
+
+
+		/////////////////////////////////////////
 		static void HierarchyWindowItemCallback( int instanceID, Rect selectionRect ) {
 			//Debug.Log( selectionRect );
 			if( !E.i.Enable ) return;
 
 			Styles.Init();
+
+			if( !initSelection ) {
+				Selection.selectionChanged -= ヒエラルキークリックでインスペクターFocus;
+				if( E.i.ヒエラルキークリックでインスペクターFocus ) Selection.selectionChanged += ヒエラルキークリックでインスペクターFocus;
+				initSelection = true;
+			}
 
 			if( E.i.extendedDragAndDrop ) DragAndDropEx.Execute( selectionRect );
 
@@ -88,13 +99,6 @@ namespace HananokiEditor.CustomHierarchy {
 #endif
 			}
 
-			if( _IMGUIContainer == null ) {
-				_IMGUIContainer = Activator.CreateInstance( UnityTypes.UnityEngine_UIElements_IMGUIContainer, new object[] { (Action) OnDrawDockPane2 } );
-				if( E.i.toolbarOverride ) {
-					_window = EditorWindowUtils.Find( UnityTypes.UnityEditor_SceneHierarchyWindow );
-					_window?.AddIMGUIContainer( _IMGUIContainer, true );
-				}
-			}
 
 
 			if( UnitySymbol.Has( "UNITY_2019_1" ) ) {
@@ -266,17 +270,22 @@ namespace HananokiEditor.CustomHierarchy {
 			}
 			//P4_DeletedLocal
 			if( E.i.removeGameObject && Selection.activeGameObject == go ) {
-				var re = selectionRect;
-				re.x = 16 + 16;
-				re.width = 16;
-				if( HEditorGUI.IconButton( re, EditorIcon.p4_deletedlocal ) ) {
-					Undo.DestroyObjectImmediate( go );
+				var stage = PrefabStageUtility.GetCurrentPrefabStage();
+				if( stage == null ) {
+
+					var re = selectionRect;
+					re.x = 16 + 16;
+					re.width = 16;
+					if( HEditorGUI.IconButton( re, EditorIcon.p4_deletedlocal ) ) {
+						Undo.DestroyObjectImmediate( go );
+					}
 				}
 			}
 		}
 
 
 
+		/////////////////////////////////////////
 		static void DrawBackColor( Rect selectionRect, int mask ) {
 			//if( _SimaSima == false ) return;
 
@@ -295,6 +304,7 @@ namespace HananokiEditor.CustomHierarchy {
 
 
 
+		/////////////////////////////////////////
 		/// <summary>
 		/// アクティブボタン
 		/// </summary>
@@ -320,6 +330,8 @@ namespace HananokiEditor.CustomHierarchy {
 		}
 
 
+
+		/////////////////////////////////////////
 		static bool DrawPrefabIconGUI( Rect rc, GameObject go ) {
 
 			bool draw = true;
@@ -463,28 +475,5 @@ namespace HananokiEditor.CustomHierarchy {
 		} // DrawAnimationMonitor
 #endif
 
-		static void OnDrawDockPane2() {
-			ScopeHorizontal.Begin();
-			GUILayout.Space( 120 );
-
-			if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_animationwindow, SS._Animation ) ) {
-				HEditorWindow.ShowWindow( UnityTypes.UnityEditor_AnimationWindow );
-			}
-			if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_graphs_animatorcontrollertool, SS._Animator ) ) {
-				HEditorWindow.ShowWindow( UnityTypes.UnityEditor_Graphs_AnimatorControllerTool );
-			}
-
-			if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_timeline_timelinewindow, SS._Timeline ) ) {
-				HEditorWindow.ShowWindow( UnityTypes.UnityEditor_Timeline_TimelineWindow );
-			}
-			GUILayout.Space( 8 );
-			if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_consolewindow, SS._Console ) ) {
-				HEditorWindow.ShowWindow( UnityTypes.UnityEditor_ConsoleWindow );
-			}
-			if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_profilerwindow, SS._Profiler ) ) {
-				HEditorWindow.ShowWindow( UnityTypes.UnityEditor_ProfilerWindow );
-			}
-			ScopeHorizontal.End();
-		}
 	}
 }

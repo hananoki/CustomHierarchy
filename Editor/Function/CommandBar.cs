@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using HananokiRuntime.Extensions;
 using HananokiEditor.Extensions;
 using System;
 using System.Linq;
@@ -58,7 +57,7 @@ namespace HananokiEditor.CustomHierarchy {
 
 			if( UnitySymbol.UNITY_2019_3_OR_NEWER ) {
 				con.style.height = 20;
-				con.style.width = 26;
+				con.style.width = 26 * 2 + 36 * 2;
 				con.style.marginLeft = 36;
 			}
 			else if( UnitySymbol.UNITY_2019_2_OR_NEWER ) {
@@ -81,6 +80,7 @@ namespace HananokiEditor.CustomHierarchy {
 
 
 		static void OnDrawDockPane() {
+			E.Load();
 			GUILayout.BeginArea( new Rect( 0, 0, s_sceneHierarchy.position.width, 20 ) );
 			ScopeHorizontal.Begin();
 			GUILayout.Space( 1 );
@@ -96,7 +96,7 @@ namespace HananokiEditor.CustomHierarchy {
 			HGUIToolbar.DropDown( EditorIcon.search_icon, () => {
 				var m = new GenericMenu();
 				m.AddItem( "None", _Filter, null );
-				var ll = E.i.m_componentHandlerData.OrderBy( x => x.type.Name ).Where( x => x.search );
+				var ll = E.i.m_componentHandlerData.Where( x => x.type != null ).OrderBy( x => x.type.Name ).Where( x => x.search );
 				if( 0 < ll.Count() ) {
 					m.AddSeparator();
 					foreach( var p in ll ) {
@@ -120,15 +120,17 @@ namespace HananokiEditor.CustomHierarchy {
 
 		static void _Filter( object context ) {
 			var p = (ComponentHandlerData) context;
-			string filter = "";
-			SearchableEditorWindow.SearchMode mode = SearchableEditorWindow.SearchMode.All;
 			if( p != null ) {
-				filter = p.type.Name;
-				mode = SearchableEditorWindow.SearchMode.Type;
-				//filter = s.filter.Split('/').Last();
-				//mode = s.searchMode;
+				//	filter = p.type.Name;
+				//	mode = SearchableEditorWindow.SearchMode.Type;
+				//	//filter = s.filter.Split('/').Last();
+				//	//mode = s.searchMode;
+				//SceneHierarchyUtils.SetSearchFilter( filter, mode );
+				SceneModeUtility.SearchForType( p.type );
 			}
-			SceneHierarchyUtils.SetSearchFilter( filter, mode );
+			else {
+				SceneModeUtility.SearchForType( null );
+			}
 		}
 
 	}

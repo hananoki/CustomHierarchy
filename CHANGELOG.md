@@ -1,5 +1,17 @@
 # Custom Hierarchy
 
+## [0.7.2] - 2021-04-03
+- SharedModule v1.8.0 or later
+
+### Changed
+- Changed the behavior of the search filter to SceneModeUtility
+- Added property name to convert to URP material
+- CustomHierarchy/Components: Menu items can be replaceds
+
+### Fixed
+- Fixed Visual Element style on toolbar
+- Fixed an issue where the MaterialEditorWindow was initialized every time
+
 ## [0.7.1] - 2021-03-01
 - SharedModule v1.7.6 or later
 

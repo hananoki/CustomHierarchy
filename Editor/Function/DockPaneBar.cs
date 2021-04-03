@@ -95,7 +95,8 @@ namespace HananokiEditor.CustomHierarchy {
 			}
 			if( HEditorGUILayout.IconButton( EditorIcon.icons_processed_unityengine_ui_image_icon_asset, "Image" ) ) {
 				EditorApplication.ExecuteMenuItem( "GameObject/UI/Image" );
-			}if( HEditorGUILayout.IconButton( EditorIcon.icons_processed_unityengine_ui_rawimage_icon_asset, "RawImage" ) ) {
+			}
+			if( HEditorGUILayout.IconButton( EditorIcon.icons_processed_unityengine_ui_rawimage_icon_asset, "RawImage" ) ) {
 				EditorApplication.ExecuteMenuItem( "GameObject/UI/Raw Image" );
 			}
 			if( HEditorGUILayout.IconButton( EditorIcon.icons_processed_collabdeleted_icon_asset, "Selection Clear" ) ) {

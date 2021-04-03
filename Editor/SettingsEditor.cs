@@ -1,6 +1,6 @@
 ﻿using HananokiRuntime.Extensions;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using E = HananokiEditor.CustomHierarchy.SettingsEditor;
@@ -24,6 +24,7 @@ namespace HananokiEditor.CustomHierarchy {
 		const int REMOVE_GAME_OBJECT = ( 1 << 10 );
 		const int ENABLE_LINE_COLOR = ( 1 << 11 );
 		const int EXTEND_DD = ( 1 << 12 );
+		const int _ヒエラルキークリックでインスペクターFocus = ( 1 << 13 );
 
 		public bool dockPaneBar {
 			get => flag.Has( DOCKPANE_BAR );
@@ -77,7 +78,10 @@ namespace HananokiEditor.CustomHierarchy {
 			get => flag.Has( EXTEND_DD );
 			set => flag.Toggle( EXTEND_DD, value );
 		}
-
+		public bool ヒエラルキークリックでインスペクターFocus {
+			get => flag.Has( _ヒエラルキークリックでインスペクターFocus );
+			set => flag.Toggle( _ヒエラルキークリックでインスペクターFocus, value );
+		}
 
 		public bool Enable = true;
 
@@ -86,8 +90,8 @@ namespace HananokiEditor.CustomHierarchy {
 		public Color lineColorProfessional = new Color( 1, 1, 1, 0.05f );
 
 		public float offsetPosX;
+		public float componentToolPos;
 
-		public bool toolbarOverride;
 
 		public List<ComponentHandlerData> m_componentHandlerData;
 		public List<MenuCommandData> m_menuCommandData;
@@ -125,16 +129,4 @@ namespace HananokiEditor.CustomHierarchy {
 			return false;
 		}
 	}
-
-
-
-	//public class SettingsEditorWindow : HSettingsEditorWindow {
-	//	public static void Open() {
-	//		var w = GetWindow<SettingsEditorWindow>();
-	//		w.SetTitle( new GUIContent( "Project Settings", EditorIcon.settings ) );
-	//		w.headerMame = Package.name;
-	//		w.headerVersion = Package.version;
-	//		w.gui = SettingsDrawer.DrawGUI;
-	//	}
-	//}
 }

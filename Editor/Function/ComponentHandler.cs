@@ -1,21 +1,12 @@
 ﻿using HananokiEditor.Extensions;
-using HananokiRuntime.Extensions;
 using HananokiRuntime;
-using System.Collections.Generic;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityReflection;
-using HananokiEditor.Extensions;
-using UnityEditor;
-using UnityEditor.SceneManagement;
-using UnityEditorInternal;
-using UnityEngine;
-using UnityReflection;
-using System.Collections;
-
 using E = HananokiEditor.CustomHierarchy.SettingsEditor;
 using UnityObject = UnityEngine.Object;
 
@@ -30,7 +21,7 @@ namespace HananokiEditor.CustomHierarchy {
 
 		public class ComponentObjects {
 			public Component[] components;
-			public Component inspec;
+			public Component[] inspec;
 			public HierarchyComponentTool[] tools;
 
 			public HierarchyComponentTool GetTool<T>() {
@@ -75,10 +66,9 @@ namespace HananokiEditor.CustomHierarchy {
 			return s_current.GetTool<T>();
 		}
 
+
 		public static void Execute( Rect selectionRect ) {
-			if( s_componets == null ) {
-				s_componets = new Dictionary<int, ComponentObjects>();
-			}
+			Helper.New( ref s_componets );
 			s_componets.TryGetValue( go.GetInstanceID(), out s_current );
 
 			if( s_current == null ) {
@@ -86,13 +76,8 @@ namespace HananokiEditor.CustomHierarchy {
 					components = go.GetComponents( typeof( Component ) ).Where( x => x != null ).ToArray(),
 				};
 
-				foreach( var c in s_current.components ) {
-					if( E.HasInspecClass( c.GetType() ) ) {
-						s_current.inspec = c;
-						break;
-					}
-				}
 				var lst = new List<HierarchyComponentTool>();
+				var inspectLst = new List<Component>();
 				foreach( var c in s_current.components ) {
 					var ctype = c.GetType();
 					foreach( var t in m_componetToolTypes ) {
@@ -104,8 +89,12 @@ namespace HananokiEditor.CustomHierarchy {
 							lst.Add( tool );
 						}
 					}
+					if( E.HasInspecClass( c.GetType() ) ) {
+						inspectLst.Add( c );
+					}
 				}
 				s_current.tools = lst.ToArray();
+				s_current.inspec = inspectLst.ToArray();
 				s_componets.Add( go.GetInstanceID(), s_current );
 			}
 
@@ -115,10 +104,15 @@ namespace HananokiEditor.CustomHierarchy {
 			rc.x += pos.x + 20;
 			rc.x += 4;
 
-			rc.width = 16;
 
-			if( s_current.inspec != null ) _InspectorButton( ref rc, s_current.inspec );
 
+			foreach( var c in s_current.inspec ) {
+				_InspectorButton( ref rc, c );
+			}
+
+			if( 0 < E.i.componentToolPos ) {
+				rc.x = E.i.componentToolPos;
+			}
 			foreach( var p in s_current.tools ) {
 				p?.OnGUI( ref rc );
 			}
@@ -128,6 +122,7 @@ namespace HananokiEditor.CustomHierarchy {
 
 
 		static void _InspectorButton( ref Rect rect, UnityObject obj, UnityObject icont = null ) {
+			rect.width = 16;
 			var icon = (Texture2D) obj.ObjectContent().image;
 			if( obj.GetType() == typeof( SpriteRenderer ) ) {
 				icon = ( (SpriteRenderer) obj ).sprite.GetCachedIcon();
@@ -152,8 +147,13 @@ namespace HananokiEditor.CustomHierarchy {
 
 
 			if( HEditorGUI.IconButton( rect, icon ) ) {
+				if( Event.current.control ) {
+					Window_ComponentEditor.Open( obj );
+				}
+				else {
+					PopupContent_Component.Show( rect, obj );
+				}
 				//ComponentPopupWindow.Open( s_current.image, ( b ) => { } );
-				ComponentEditor.Open( obj );
 				Event.current.Use();
 			}
 			rect.x += 20;

@@ -1,6 +1,6 @@
-﻿using UnityEditor;
+﻿using HananokiEditor.Extensions;
+using UnityEditor;
 using UnityEngine;
-using HananokiEditor.Extensions;
 
 namespace HananokiEditor.CustomHierarchy {
 	public class MaterialEditorWindow : HNEditorWindow<MaterialEditorWindow> {
@@ -15,8 +15,10 @@ namespace HananokiEditor.CustomHierarchy {
 		}
 
 		void Init() {
-			SetTitle( "マテリアル", EditorIcon.icons_processed_unityengine_material_icon_asset );
+			SetTitle( "Material", EditorIcon.icons_processed_unityengine_material_icon_asset );
 			m_currentEditor = (MaterialEditor) Editor.CreateEditor( m_material );
+			UnityEditorInternal.InternalEditorUtility.SetIsInspectorExpanded( m_material, true );
+			m_inited = true;
 		}
 
 		public override void OnDefaultGUI() {
@@ -34,14 +36,25 @@ namespace HananokiEditor.CustomHierarchy {
 					if( p.name.Contains( "Universal Render Pipeline" ) ) {
 						//Debug.Log( p.name );
 						m.AddItem( p.name.Replace( "Universal Render Pipeline/", "" ), ( context ) => {
-							EditorHelper.Dirty( m_material, ()=> {
-								var _MainTex = m_material.GetTexture( "_MainTex" );
-								var _TintColor = m_material.GetColor( "_TintColor" );
+							EditorHelper.Dirty( m_material, () => {
+
 								//Debug.Log( m_material.mainTexture.name );
 								m_material.shader = Shader.Find( (string) context ); ;
-
-								m_material.SetTexture( "_BaseMap", _MainTex );
-								m_material.SetColor( "_BaseColor", _TintColor );
+								if( m_material.HasProperty( "_MainTex" ) ) {
+									m_material.SetTexture( "_BaseMap", m_material.GetTexture( "_MainTex" ) );
+								}
+								if( m_material.HasProperty( "_TintColor" ) ) {
+									m_material.SetColor( "_BaseColor", m_material.GetColor( "_TintColor" ) );
+								}
+								if( m_material.HasProperty( "_Color" ) ) {
+									m_material.SetColor( "_BaseColor", m_material.GetColor( "_Color" ) );
+								}
+								if( m_material.HasProperty( "_Metallic" ) ) {
+									m_material.SetFloat( "_Metallic", m_material.GetFloat( "_Metallic" ) );
+								}
+								if( m_material.HasProperty( "_Glossiness" ) ) {
+									m_material.SetFloat( "_Smoothness", m_material.GetFloat( "_Glossiness" ) );
+								}
 							} );
 						}, p.name );
 					}

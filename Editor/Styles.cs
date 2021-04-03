@@ -15,8 +15,8 @@ namespace HananokiEditor.CustomHierarchy {
 
 		public static GUIStyle controlLabel => s_styles.ControlLabel;
 
-		public static GUIStyle objectField=> s_styles.ObjectField;
-		
+		public static GUIStyle objectField => s_styles.ObjectField;
+
 
 		public Texture2D PrefabNormal => Icon._PrefabNormal;
 		public Texture2D PrefabModel => Icon._PrefabModel;

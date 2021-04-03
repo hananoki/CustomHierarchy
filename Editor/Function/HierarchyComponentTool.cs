@@ -1,117 +1,47 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using HananokiEditor.Extensions;
-using HananokiRuntime.Extensions;
-using HananokiRuntime;
-using System.Collections.Generic;
-using System;
-using System.Linq;
+﻿using HananokiEditor.Extensions;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityReflection;
-using HananokiEditor.Extensions;
-using UnityEditor;
-using UnityEditor.SceneManagement;
-using UnityEditorInternal;
-using UnityEngine;
-using UnityReflection;
-using System.Collections;
-
-using E = HananokiEditor.CustomHierarchy.SettingsEditor;
 using UnityObject = UnityEngine.Object;
 
 namespace HananokiEditor.CustomHierarchy {
-	abstract class HierarchyComponentTool {
-		public Type type;
-		public GameObject go;
-		public UnityObject obj;
-		public abstract void OnGUI( ref Rect rect );
-
-		public virtual UnityObject GetReferenceObject() => null;
-
-		protected void _ColorField( ref Rect rect, UnityObject obj, Color color, Action<Color> changed ) {
-			rect.width = 32;
-			ScopeChange.Begin();
-			var _color = UnityEditorEditorGUI.DoColorField( rect, obj.GetInstanceID(), color, true, true, false );
-			if( ScopeChange.End() ) {
-				EditorHelper.Dirty( obj, () => {
-					changed( _color );
-				} );
-			}
-			rect.x += rect.width + 4;
-		}
-
-		protected void _AlphaSlider( ref Rect rect, UnityObject obj, float alpha, Action<float> changed ) {
-			rect.width = 40;
-
-			ScopeChange.Begin();
-			var _a = HEditorGUI.Slider( rect, alpha, 0, 1 );
-			if( ScopeChange.End() ) {
-				EditorHelper.Dirty( obj, () => {
-					changed( _a );
-				} );
-			}
-			rect.x += rect.width + 4;
-		}
-
-		protected void _AlphaSlider( ref Rect rect, UnityObject obj, Color color, Action<Color> changed ) {
-			rect.width = 40;
-
-			ScopeChange.Begin();
-			var _a = HEditorGUI.Slider( rect, color.a, 0, 1 );
-			if( ScopeChange.End() ) {
-				EditorHelper.Dirty( obj, () => {
-					changed( ColorUtils.RGBA( color, _a ) );
-				} );
-			}
-			rect.x += rect.width + 4;
-		}
-
-		protected void _ObjectField<T>( ref Rect rect, T obj, Action<T> changed ) where T : UnityObject {
-			rect.width = 33;
-			ScopeChange.Begin();
-			var id = go.GetInstanceID();
-			var t = obj != null ? obj.GetType() : typeof( T );
-			var _obj = UnityEditorEditorGUI.DoObjectField( rect, rect, id, obj, t, null, null, false, Styles.objectField );
-			if( ScopeChange.End() ) {
-				EditorHelper.Dirty( go, () => {
-					changed( (T) _obj );
-				} );
-			}
-			rect.x += rect.width + 4;
-		}
-
-		protected void _Graphic( ref Rect rect, Graphic obj ) {
-			_ColorField( ref rect, obj, obj.color, ( color ) => {
-				obj.color = color;
-			} );
-			_AlphaSlider( ref rect, obj, obj.color, ( color ) => {
-				obj.color = color;
-			} );
-
-			rect.width = 16;
-			ScopeChange.Begin();
-			var _b = EditorGUI.Toggle( rect, obj.raycastTarget );
-			if( ScopeChange.End() ) {
-				EditorHelper.Dirty( obj, () => {
-					obj.raycastTarget = _b;
-				} );
-			}
-		}
-	}
-
-
 
 	[Hananoki_Hierarchy_ComponentTool( typeof( Light ) )]
 	class LightTool : HierarchyComponentTool {
 		Light self => (Light) obj;
+
+		static GUIStyle s_label;
+
 		public override void OnGUI( ref Rect rect ) {
 			rect.width = 16;
 			_ColorField( ref rect, self, self.color, ( color ) => {
 				self.color = color;
 			} );
+
+			if( s_label == null ) {
+				s_label = new GUIStyle( EditorStyles.miniLabel );
+				s_label.padding = new RectOffset( 0, 0, 0, 0 );
+				s_label.margin = new RectOffset( 0, 0, 0, 0 );
+				s_label.alignment = TextAnchor.UpperLeft;
+				s_label.fontSize = 7;
+			}
+
+			var type = L10n.Tr( self.type.ToString() );
+			var lightmapBakeType = L10n.Tr( self.lightmapBakeType.ToString() );
+			rect.width = Mathf.Max( type.CalcSize( s_label ).x, lightmapBakeType.CalcSize( s_label ).x );
+			rect.width = type.CalcSize( EditorStyles.miniLabel ).x;
+			EditorGUI.LabelField( rect, type, EditorStyles.miniLabel );
+
+			//rect.x += rect.width;
+			//rect.width = "|".CalcSize( EditorStyles.miniLabel ).x;
+			//EditorGUI.LabelField( rect, "|", EditorStyles.miniLabel );
+
+			rect.x += rect.width;
+			rect.width = lightmapBakeType.CalcSize( EditorStyles.miniLabel ).x;
+			EditorGUI.LabelField( rect, lightmapBakeType, EditorStyles.miniLabel );
+
+			rect.x += rect.width;
 		}
 	}
 
@@ -130,10 +60,22 @@ namespace HananokiEditor.CustomHierarchy {
 				else {
 					icon = AssetPreview.GetAssetPreview( m );
 				}
+				rect.width = 16;
 				if( HEditorGUI.IconButton( rect, icon ) ) {
 					//s_currentComponents.particleSystem.main
 					MaterialEditorWindow.Open( m );
+
 				}
+				//EditorGUI.DrawRect( rect, new Color(1,0,0,0.1f) );
+
+				//var so = new SerializedObject( self );
+				//var it = so.FindProperty( "sharedMaterial" );
+				//Debug.Log( it.isExpanded );
+				//;
+				//while( it.Next( true ) ) {
+				//	if( it.isExpanded )
+				//	Debug.Log( $"display: {it.displayName}: {it.isExpanded}" );
+				//}
 				rect.x += 16;
 
 				_ObjectField( ref rect, m, ( material ) => {

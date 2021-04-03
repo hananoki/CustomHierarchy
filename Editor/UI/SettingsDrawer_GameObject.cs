@@ -1,29 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine;
+﻿
 using HananokiEditor.Extensions;
-using HananokiEditor.SharedModule;
-using UnityEditor;
-using UnityEngine;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEditorInternal;
-using UnityEngine;
-using HananokiRuntime.Extensions;
 using HananokiRuntime;
-using HananokiEditor.SharedModule;
-using UnityReflection;
-using UnityEngine.UI;
+using System.Linq;
+using UnityEditor;
+using UnityEngine;
 using E = HananokiEditor.CustomHierarchy.SettingsEditor;
-using SS = HananokiEditor.SharedModule.S;
 
 namespace HananokiEditor.CustomHierarchy {
 	public class SettingsDrawer_GameObject {
+#if false
 		[HananokiSettingsRegister]
 		public static SettingsItem RegisterSettings() {
 			return new SettingsItem() {
@@ -33,7 +18,7 @@ namespace HananokiEditor.CustomHierarchy {
 				customLayoutMode = true,
 			};
 		}
-
+#endif
 		static TreeView_GameObject m_treeView;
 
 		public static void DrawGUI() {
@@ -73,3 +58,5 @@ namespace HananokiEditor.CustomHierarchy {
 
 	}
 }
+
+

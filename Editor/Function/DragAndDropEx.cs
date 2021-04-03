@@ -1,16 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Collections.Generic;
-using HananokiEditor.Extensions;
-using HananokiRuntime.Extensions;
-using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.SceneManagement;
-using UnityEditorInternal;
 using UnityEngine;
-using UnityReflection;
 
 namespace HananokiEditor.CustomHierarchy {
 	public static class DragAndDropEx {
@@ -32,7 +23,7 @@ namespace HananokiEditor.CustomHierarchy {
 			//if( _Sprite() ) goto perform;
 			return;
 
-			perform:
+		perform:
 			if( Event.current.type == EventType.DragPerform ) {
 				DragAndDrop.AcceptDrag();
 				Event.current.Use();
