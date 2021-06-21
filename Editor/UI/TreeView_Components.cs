@@ -157,8 +157,8 @@ namespace HananokiEditor.CustomHierarchy {
 
 
 		/////////////////////////////////////////
-		protected override void SingleSelectionChanged( Item item ) {
-			BackupLastSelect( item );
+		protected override void OnSelectionChanged( Item[] items ) {
+			BackupLastSelect( items[0] );
 		}
 
 

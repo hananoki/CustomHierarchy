@@ -1,5 +1,8 @@
 # Custom Hierarchy
 
+## [0.7.3] - 2021-06-21
+- SharedModule v1.10.0 or later
+
 ## [0.7.2] - 2021-04-03
 - SharedModule v1.8.0 or later
 
