@@ -96,6 +96,7 @@ namespace HananokiEditor.CustomHierarchy {
 				E.Save();
 				EditorWindowUtils.RepaintHierarchyWindow();
 			}
+			E.i.Selectionのプレハブがヒエラルキー上にあると通知 = HEditorGUILayout.ToggleLeft( "Selectionのプレハブがヒエラルキー上にあると通知", E.i.Selectionのプレハブがヒエラルキー上にあると通知 );
 			GUILayout.Space( 8f );
 
 			/////////////////////////

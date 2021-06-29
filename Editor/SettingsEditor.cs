@@ -25,6 +25,7 @@ namespace HananokiEditor.CustomHierarchy {
 		const int ENABLE_LINE_COLOR = ( 1 << 11 );
 		const int EXTEND_DD = ( 1 << 12 );
 		const int _ヒエラルキークリックでインスペクターFocus = ( 1 << 13 );
+		const int PREFAB_NOTIFY = ( 1 << 14 );
 
 		public bool dockPaneBar {
 			get => flag.Has( DOCKPANE_BAR );
@@ -81,6 +82,10 @@ namespace HananokiEditor.CustomHierarchy {
 		public bool ヒエラルキークリックでインスペクターFocus {
 			get => flag.Has( _ヒエラルキークリックでインスペクターFocus );
 			set => flag.Toggle( _ヒエラルキークリックでインスペクターFocus, value );
+		}
+		public bool Selectionのプレハブがヒエラルキー上にあると通知 {
+			get => flag.Has( PREFAB_NOTIFY );
+			set => flag.Toggle( PREFAB_NOTIFY, value );
 		}
 
 		public bool Enable = true;

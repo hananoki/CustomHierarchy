@@ -105,8 +105,7 @@ namespace HananokiEditor.CustomHierarchy {
 
 
 		/////////////////////////////////////////
-		protected override void OnRowGUI( RowGUIArgs args ) {
-			var item = (Item) args.item;
+		protected override void OnRowGUI( Item item, RowGUIArgs args ) {
 			bool changed = false;
 
 			for( var i = 0; i < args.GetNumVisibleColumns(); i++ ) {
@@ -229,18 +228,17 @@ namespace HananokiEditor.CustomHierarchy {
 		}
 
 
-		protected override void SetupDragAndDrop( SetupDragAndDropArgs args ) {
-			if( args.draggedItemIDs == null ) return;
+		protected override void OnSetupDragAndDrop( Item[] items ) {
 
 			DragAndDrop.PrepareStartDrag();
 
 			DragAndDrop.paths = null;
-			DragAndDrop.SetGenericData( dragID, ToItems( args.draggedItemIDs ).ToList() );
+			DragAndDrop.SetGenericData( dragID, items.ToList() );
 			DragAndDrop.visualMode = DragAndDropVisualMode.None;
 			DragAndDrop.StartDrag( $"{dragID}.StartDrag" );
 		}
 
-		protected override bool CanStartDrag( CanStartDragArgs args ) {
+		protected override bool OnCanStartDrag( Item item, CanStartDragArgs args ) {
 			return true;
 		}
 

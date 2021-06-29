@@ -92,9 +92,11 @@ namespace HananokiEditor.CustomHierarchy {
 					var _sceneHierarchy = wnd.GetProperty<object>( "sceneHierarchy" );
 					var _treeView = _sceneHierarchy.GetProperty<object>( "treeView" );
 					var _gui = _treeView.GetProperty<object>( "gui" );
-					//var _selectionStyle = _gui.GetProperty<object>( "selectionStyle" );
+					var _selectionStyle = _gui.GetProperty<GUIStyle>( "selectionStyle" );
 
-					_gui.SetProperty( "selectionStyle", new GUIStyle( "AvatarMappingBox" ) );
+					//_selectionStyle.c
+
+					_gui.SetProperty( "selectionStyle", new GUIStyle( "MeTransitionSelect" ) );
 				}
 #endif
 			}
@@ -138,6 +140,17 @@ namespace HananokiEditor.CustomHierarchy {
 			rc.x = max;
 			rc.x -= E.i.offsetPosX;
 
+			if( E.i.Selectionのプレハブがヒエラルキー上にあると通知 ) {
+				if( Selection.activeGameObject != null ) {
+					var prt = PrefabUtility.GetPrefabParent( go);
+					if( prt == Selection.activeGameObject ) {
+						var cc = Color.green;
+						cc.a = 0.1f;
+
+						EditorGUI.DrawRect( selectionRect, cc );
+					}
+				}
+			}
 
 			if( E.i.activeToggle ) {
 				rc.x = rc.x - WIDTH;
@@ -361,6 +374,31 @@ namespace HananokiEditor.CustomHierarchy {
 					break;
 				case PrefabInstanceStatus.Connected:
 					var ico = type == PrefabAssetType.Model ? Styles.prefabModel : Styles.prefabNormal;
+#if UNITY_2019_2_OR_NEWER
+					if( EditorHelper.HasMouseClick( rc, EventMouseButton.R ) ) {
+						var wnd = new UnityEditorPrefabOverridesWindow( go );
+						//wnd.UpdateStatusChecks( go );
+						var m = new GenericMenu();
+						if( !wnd.IsShowingActionButton() ) {
+							m.AddDisabledItem( "Apply All" );
+							m.AddDisabledItem( "Revert All" );
+						}
+						else {
+							//m.AddDisabledItem( "Apply All" );
+							//m.AddDisabledItem( "Revert All" );
+							m.AddItem( "Apply All", ( context ) => {
+								(var a, var b) = (System.ValueTuple<UnityEditorPrefabOverridesWindow, GameObject>) context;
+								a.ApplyAll();
+							}, (wnd, go) );
+							m.AddItem( "Revert All", ( context ) => {
+								(var a, var b) = (System.ValueTuple<UnityEditorPrefabOverridesWindow, GameObject>) context;
+								a.RevertAll();
+							}, new System.ValueTuple<UnityEditorPrefabOverridesWindow, GameObject>( wnd, go) );
+						}
+						m.DropDownAtMousePosition();
+						//Event.current.Use();
+					}
+#endif
 					if( HEditorGUI.IconButton( rc, ico ) ) {
 						//var aa = PrefabUtility.GetCorrespondingObjectFromSource( go );
 						//t.GetMethod( "GetCorrespondingObjectFromSource" );

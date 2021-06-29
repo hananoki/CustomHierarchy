@@ -21,6 +21,8 @@ namespace HananokiEditor.CustomHierarchy {
 			m_inited = true;
 		}
 
+
+
 		public override void OnDefaultGUI() {
 			if( !m_inited ) Init();
 
@@ -31,6 +33,11 @@ namespace HananokiEditor.CustomHierarchy {
 			if( HGUIToolbar.DropDown( "URP" ) ) {
 				ShaderInfo[] allShaderInfo = ShaderUtil.GetAllShaderInfo();
 				var m = new GenericMenu();
+				m.AddItem( "選択中のマテリアルをアップグレードする (Unityの機能)", ()=> {
+					Selection.activeObject = m_material;
+					GraphicsSettingsUtils.選択中のマテリアルをアップグレードする();
+				} );
+				m.AddSeparator();
 				foreach( var p in allShaderInfo ) {
 					if( p.name.StartsWith( "Hidden" ) ) continue;
 					if( p.name.Contains( "Universal Render Pipeline" ) ) {
