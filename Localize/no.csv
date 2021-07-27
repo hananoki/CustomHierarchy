@@ -1,14 +1,15 @@
-Vis veksle til vippe spillet objekt aktiv
-Vise ferdighus status med ikoner
-Gå opp ett nivå
-Pinge en scene fil ved å klikke på scenen ikonet
-Visningskodenavn og lagnavn
-Vise treet
-Element skjerm forskyvning X
-numpad kontroll
-Bruk alle
-revert Alle
-Skjul GameObject
-Unhide GameObject
-Component Handler
+Vis veksle for å bytte spillobjekt aktiv
+Vis prefab status med ikoner
+Flytt opp ett nivå
+Ping en scenefil ved å klikke på scenenikonet
+Vis tagnavn og lagnavn
+Vis treet
+Element Display Offset X
+Numpad Control.
+Gjelder alt
+Gå tilbake alle sammen
+Skjul GameObject.
+Unhide gameobject.
+Komponenthåndterer
 GameObject Slett-knappen
+Registrer alle komponentene som brukes i den nåværende scenen

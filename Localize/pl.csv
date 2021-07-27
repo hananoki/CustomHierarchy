@@ -1,14 +1,15 @@
-Pokaż przełącznik do obiektu aktywnego przełączania gry
-Wyświetlanie statusu prefabrykatów z ikonami
-Przesuń w górę o jeden poziom
-Ping plik sceny, klikając ikonę sceny
-Wyświetlana nazwa tag i nazwę warstwy
-Wyświetla drzewo
-Wyświetlacz poz przesunięcie X
-Numpad kontroli
-Zastosuj wszystkie
-przywrócić wszystkie
-Ukryj GameObject
-unhide GameObject
-komponent Handler
-GameObject przycisk Usuń
+Pokaż przełącznik, aby przełączyć aktywny obiekt gry
+Wyświetl stan prefabrykowania z ikonami
+Przenieś jeden poziom
+Ping Plik sceny, klikając ikonę sceny
+Wyświetl nazwę tagu i nazwa warstwy
+Wyświetl drzewo
+Element Wyświetlacz Offset X
+Sterowanie Numpad.
+Stosować wszystkie
+Powrócić do wszystkich
+Ukryj Gamebject.
+Odkryj Gamebject.
+Component Handler.
+Przycisk Usuń GameObject.
+Zarejestruj wszystkie składniki używane w bieżącej scenie

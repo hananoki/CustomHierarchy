@@ -1,14 +1,15 @@
-Näita lülita et lülita mäng objekti aktiivne
-Näita Paneelmaja staatuse ikoonid
-Taseme võrra ülespoole
-Ping stseeni fail, klõpsates stseen ikoon
-Display sildi nimi ja kiht nimi
+Näita lülitab mängu objekti vahetamiseks
+Kuvage Prefab staatus ikoonidega
+Liiguta ühe taseme
+Ping stseeni faili klõpsates stseeni ikoon
+Ekraani tag nimi ja kihi nimi
 Näita puu
-Oksjoni kuva nihe X
-Numbriklahvistiku kontroll
-Täida kõik
-Taasta kõik
-Peida GameObject
-nähtavale tuua GameObject
-Component Handler
-GameObject Delete Button
+Üksus Display Offset X
+Numepaadi kontroll
+Rakenda kõik
+Tagasi pöörduma
+Peida gameObject
+Uduobject
+Komponendi käitleja
+GameObject Deatte'i nupp
+Registreerige kõik praeguses stseenis kasutatavad komponendid

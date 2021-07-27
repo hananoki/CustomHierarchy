@@ -1,14 +1,15 @@
-Tampilkan beralih ke beralih permainan objek aktif
-Menampilkan status prefab dengan ikon
-Pindah ke atas satu tingkat
-Ping file adegan dengan mengeklik ikon scene
+Tampilkan toggle untuk beralih objek permainan aktif
+Tampilkan status prefab dengan ikon
+Naik satu tingkat
+Ping file adegan dengan mengklik ikon adegan
 Tampilan nama tag dan nama layer
-Menampilkan pohon
-Item layar diimbangi X
-Numpad Kontrol
-Terapkan Semua
-Kembalikan Semua
-Sembunyikan GameObject
-unhide GameObject
-komponen Handler
-GameObject tombol Hapus
+Tampilkan pohon itu
+Tampilan item offset x
+Kontrol NUMPAD.
+Terapkan semua
+Kembalikan semua
+Sembunyikan GameObject.
+Perlihatkan gameobject.
+Komponen handler.
+GameObject Delete Button.
+Daftarkan semua komponen yang digunakan dalam adegan saat ini

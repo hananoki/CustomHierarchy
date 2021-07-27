@@ -5,18 +5,20 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
-using E = HananokiEditor.CustomHierarchy.SettingsEditor;
+using E = HananokiEditor.CustomHierarchy.EditorPref;
 
 
 namespace HananokiEditor.CustomHierarchy {
-	using Item = TreeView_Components.Item;
 
-	public sealed class TreeView_Components : HTreeView<Item> {
+	using Item = TreeViewComponents.Item;
+
+	public sealed class TreeViewComponents : HTreeView<Item> {
 
 		const int kMove = 0;
 		const int kComponents = 1;
 		const int kSearch = 2;
 		const int kInspector = 3;
+		const int kShowTool = 4;
 
 		public class Item : TreeViewItem {
 			public Type type;
@@ -26,7 +28,7 @@ namespace HananokiEditor.CustomHierarchy {
 
 
 		/////////////////////////////////////////
-		public TreeView_Components() : base( new TreeViewState() ) {
+		public TreeViewComponents() : base( new TreeViewState() ) {
 			E.Load();
 
 			showAlternatingRowBackgrounds = true;
@@ -61,6 +63,13 @@ namespace HananokiEditor.CustomHierarchy {
 				maxWidth = 24,
 				minWidth = 24,
 			} );
+			lst.Add( new MultiColumnHeaderState.Column() {
+				headerContent = new GUIContent( EditorIcon.CustomTool ),
+				width = 24,
+				maxWidth = 24,
+				minWidth = 24,
+			} );
+
 
 			multiColumnHeader = new MultiColumnHeader( new MultiColumnHeaderState( lst.ToArray() ) );
 			multiColumnHeader.ResizeToFit();
@@ -75,9 +84,8 @@ namespace HananokiEditor.CustomHierarchy {
 		/////////////////////////////////////////
 		public void RegisterFiles() {
 
-			m_root = new Item { depth = -1 };
-
 			InitID();
+			MakeRoot();
 
 			foreach( var p in E.i.m_componentHandlerData ) {
 				if( p.type == null ) continue;
@@ -98,7 +106,7 @@ namespace HananokiEditor.CustomHierarchy {
 
 		/////////////////////////////////////////
 		public void ReloadAndSorting() {
-			Reload();
+			ReloadRoot();
 			//RollbackLastSelect();
 		}
 
@@ -115,32 +123,32 @@ namespace HananokiEditor.CustomHierarchy {
 				var labelStyle = args.selected ? EditorStyles.whiteLabel : EditorStyles.label;
 
 				switch( columnIndex ) {
-				case kMove: {
+				case kMove:
 					EditorGUI.LabelField( rect.AlignCenterH( 16 ), EditorHelper.TempContent( EditorIcon.toolbar_minus ) );
 					break;
-				}
-				case kComponents: {
+
+				case kComponents:
 					Label( args, rect, item.displayName, item.icon );
 					break;
-				}
-				case kSearch: {
+
+				case kSearch:
 					ScopeChange.Begin();
-					var _b = EditorGUI.Toggle( rect.AlignCenter( 16, 16 ), item.data.search );
-					if( ScopeChange.End() ) {
-						item.data.search = _b;
-						changed = true;
-					}
+					item.data.search = EditorGUI.Toggle( rect.AlignCenter( 16, 16 ), item.data.search );
+					if( ScopeChange.End() ) changed = true;
 					break;
-				}
-				case kInspector: {
+
+				case kInspector:
 					ScopeChange.Begin();
-					var _b = EditorGUI.Toggle( rect.AlignCenter( 16, 16 ), item.data.inspector );
-					if( ScopeChange.End() ) {
-						item.data.inspector = _b;
-						changed = true;
-					}
+					item.data.inspector = EditorGUI.Toggle( rect.AlignCenter( 16, 16 ), item.data.inspector );
+					if( ScopeChange.End() ) changed = true;
 					break;
-				}
+
+				case kShowTool:
+					ScopeChange.Begin();
+					item.data.showTool = EditorGUI.Toggle( rect.AlignCenter( 16, 16 ), item.data.showTool );
+					if( ScopeChange.End() ) changed = true;
+					break;
+
 				default:
 					break;
 				}
@@ -157,7 +165,7 @@ namespace HananokiEditor.CustomHierarchy {
 
 		/////////////////////////////////////////
 		protected override void OnSelectionChanged( Item[] items ) {
-			BackupLastSelect( items[0] );
+			BackupLastSelect( items[ 0 ] );
 		}
 
 

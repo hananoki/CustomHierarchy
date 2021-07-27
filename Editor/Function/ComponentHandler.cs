@@ -4,11 +4,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
-using E = HananokiEditor.CustomHierarchy.SettingsEditor;
+using UnityReflection;
+using E = HananokiEditor.CustomHierarchy.EditorPref;
 using UnityObject = UnityEngine.Object;
+
 
 namespace HananokiEditor.CustomHierarchy {
 
@@ -34,7 +34,7 @@ namespace HananokiEditor.CustomHierarchy {
 
 		static ComponentObjects s_current;
 
-		static GameObject go => CustomHierarchy.go;
+		static GameObject go => Main.go;
 
 
 		public static void Reset() {
@@ -68,6 +68,10 @@ namespace HananokiEditor.CustomHierarchy {
 
 
 		public static void Execute( Rect selectionRect ) {
+			if( E.i.プレイモード時はコンポーネントツールを消す ) {
+				if( Application.isPlaying ) return;
+			}
+
 			Helper.New( ref s_componets );
 			s_componets.TryGetValue( go.GetInstanceID(), out s_current );
 
@@ -79,8 +83,12 @@ namespace HananokiEditor.CustomHierarchy {
 				var lst = new List<HierarchyComponentTool>();
 				var inspectLst = new List<Component>();
 				foreach( var c in s_current.components ) {
+
 					var ctype = c.GetType();
+
 					foreach( var t in m_componetToolTypes ) {
+						if( !E.HasShowTool( ctype ) ) continue;
+
 						if( t.IsAssignableFrom( ctype ) ) {
 							var tool = (HierarchyComponentTool) Activator.CreateInstance( (Type) m_componetTool[ t ] );
 							tool.type = t;
@@ -89,7 +97,8 @@ namespace HananokiEditor.CustomHierarchy {
 							lst.Add( tool );
 						}
 					}
-					if( E.HasInspecClass( c.GetType() ) ) {
+
+					if( E.HasInspecClass( ctype ) ) {
 						inspectLst.Add( c );
 					}
 				}
@@ -124,18 +133,19 @@ namespace HananokiEditor.CustomHierarchy {
 		static void _InspectorButton( ref Rect rect, UnityObject obj, UnityObject icont = null ) {
 			rect.width = 16;
 			var icon = (Texture2D) obj.ObjectContent().image;
-			if( obj.GetType() == typeof( SpriteRenderer ) ) {
-				icon = ( (SpriteRenderer) obj ).sprite.GetCachedIcon();
-			}
-			else if( obj.GetType() == typeof( Image ) ) {
-				icon = ( (Image) obj ).sprite.GetCachedIcon();
-			}
-			else if( obj.GetType() == typeof( RawImage ) ) {
-				icon = AssetPreview.GetAssetPreview( ( (RawImage) obj ).texture );
-			}
-			else if( icon == null ) {
-				icon = obj.GetType().GetIcon();
-			}
+			//if( obj.GetType() == typeof( SpriteRenderer ) ) {
+			//	icon = ( (SpriteRenderer) obj ).sprite.GetCachedIcon();
+			//}
+			//else if( obj.GetType() == typeof( Image ) ) {
+			//	icon = ( (Image) obj ).sprite.GetCachedIcon();
+			//}
+			//else if( obj.GetType() == typeof( RawImage ) ) {
+			//	icon = AssetPreview.GetAssetPreview( ( (RawImage) obj ).texture );
+			//}
+			//else if( icon == null ) {
+			//	icon = obj.GetType().GetIcon();
+			//}
+
 			//if( icont != null ) {
 			//	if( icont.GetType() == typeof( Sprite ) ) {
 			//		icon = icont.GetCachedIcon();
@@ -145,13 +155,15 @@ namespace HananokiEditor.CustomHierarchy {
 			//	}
 			//}
 
-
+			if( EditorHelper.HasMouseClick( rect, EventMouseButton.R ) ) {
+				UnityEditorEditorUtility.DisplayObjectContextMenu( rect, obj, 0 );
+			}
 			if( HEditorGUI.IconButton( rect, icon ) ) {
-				if( Event.current.control ) {
-					Window_ComponentEditor.Open( obj );
+				if( !Event.current.control ) {
+					ComponentEditorWindow.Open( obj );
 				}
 				else {
-					PopupContent_Component.Show( rect, obj );
+					PopupContentComponentEditor.Show( rect, obj );
 				}
 				//ComponentPopupWindow.Open( s_current.image, ( b ) => { } );
 				Event.current.Use();

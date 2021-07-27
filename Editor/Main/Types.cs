@@ -7,7 +7,7 @@ namespace HananokiEditor.CustomHierarchy {
 		const int ENABLE = ( 1 << 0 );
 		const int SEARCH = ( 1 << 1 );
 		const int INSPECTOR = ( 1 << 2 );
-		const int CREATE_GOBJ = ( 1 << 3 );
+		const int SHOW_TOOL = ( 1 << 3 );
 
 		public string assemblyQualifiedName;
 		public Type type => Type.GetType( assemblyQualifiedName );
@@ -27,9 +27,9 @@ namespace HananokiEditor.CustomHierarchy {
 			get => flag.Has( INSPECTOR );
 			set => flag.Toggle( INSPECTOR, value );
 		}
-		public bool createGameObject {
-			get => flag.Has( CREATE_GOBJ );
-			set => flag.Toggle( CREATE_GOBJ, value );
+		public bool showTool {
+			get => flag.Has( SHOW_TOOL );
+			set => flag.Toggle( SHOW_TOOL, value );
 		}
 
 		public ComponentHandlerData( Type t ) {

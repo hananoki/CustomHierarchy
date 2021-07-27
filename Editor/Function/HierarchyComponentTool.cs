@@ -45,6 +45,7 @@ namespace HananokiEditor.CustomHierarchy {
 		}
 	}
 
+
 	class RendererTool : HierarchyComponentTool {
 		Renderer self => (Renderer) obj;
 		public override void OnGUI( ref Rect rect ) {
@@ -184,7 +185,9 @@ namespace HananokiEditor.CustomHierarchy {
 
 	[Hananoki_Hierarchy_ComponentTool( "TMPro.TMP_Text" )]
 	class TMProTMP_TextTool : GraphicTool {
+
 		TMProTMP_Text self;
+
 		public override void OnGUI( ref Rect rect ) {
 			if( self == null ) {
 				self = new TMProTMP_Text( obj );

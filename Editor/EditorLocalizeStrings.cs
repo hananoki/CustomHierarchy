@@ -26,6 +26,7 @@ namespace HananokiEditor.CustomHierarchy {
 		public static string _UnhideGameObject => L.Tr( 11 );
 		public static string _ComponentHandler => L.Tr( 12 );
 		public static string _GameObjectDeleteButton => L.Tr( 13 );
+		public static string _Registerallthecomponentsusedinthecurrentscene => L.Tr( 14 );
 	}
 
 #if UNITY_EDITOR

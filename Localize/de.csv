@@ -1,14 +1,15 @@
-Zeigen Umschalten auf Toggle Spielobjekt aktiv
-Anzeige Fertigstatus mit Symbolen
-Bewegen Sie eine Ebene nach oben
-Ping eine Szene-Datei durch das Szene-Symbol klicken
-Anzeige Tag-Namen und den Namen Schicht
-Zeigen Sie den Baum
-Postenanzeige Offset-X
-Numpad Steuer
-Alle anwenden
-Revert All
-verstecken Gameobject
-Sichtbar machen Gameobject
-Component Handler
-Gameobject Löschtaste
+Zeigen Sie zum Umschalten des Spielobjekts aktiv umschalten
+Prefab-Status mit Symbolen anzeigen
+Bewegen Sie eine Ebene
+Ping eine Szenedatei, indem Sie auf das Szenensymbol klicken
+Tag-Name und Layer-Name anzeigen
+Den Baum anzeigern
+Artikelanzeige Offset x
+NUMPAD-Steuerung.
+Alles auftragen
+Alles zurückkehren
+GameObject ausblenden
+GameObject einleiten
+Komponentenhandler
+GameObject Delete-Taste
+Registrieren Sie alle in der aktuellen Szene verwendeten Komponenten

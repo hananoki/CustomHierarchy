@@ -1,14 +1,17 @@
 ﻿#pragma warning disable 618
 
 using HananokiEditor.Extensions;
+using HananokiRuntime;
 using HananokiRuntime.Extensions;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Experimental.SceneManagement;
 using UnityEditor.SceneManagement;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityReflection;
-using E = HananokiEditor.CustomHierarchy.SettingsEditor;
+using E = HananokiEditor.CustomHierarchy.EditorPref;
 using UnityEditorSceneManagementEditorSceneManager = UnityReflection.UnityEditorSceneManagementEditorSceneManager;
 
 
@@ -16,7 +19,7 @@ namespace HananokiEditor.CustomHierarchy {
 
 
 	[InitializeOnLoad]
-	public static partial class CustomHierarchy {
+	public static partial class Main {
 
 		const int WIDTH = 16;
 
@@ -25,30 +28,56 @@ namespace HananokiEditor.CustomHierarchy {
 
 		internal static bool initSelection;
 
+		internal static TreeViewHideSelect m_treeViewHideSelect;
+
+		internal static List<GameObject> m_missingScript;
+		internal static List<GameObject> m_sceneObjects;
+
+
 		/////////////////////////////////////////
-		static CustomHierarchy() {
+		static Main() {
 			E.Load();
-			EditorApplication.hierarchyWindowItemOnGUI += HierarchyWindowItemCallback;
-			EditorApplication.hierarchyChanged += OnHierarchyChanged;
-			EditorSceneManager.sceneOpened += ( scene, mode ) => {
-				ComponentHandler.Reset();
-			};
+			EditorApplication.hierarchyWindowItemOnGUI += HananokiEditor_CustomHierarchy_HierarchyWindowItemCallback;
+			EditorApplication.hierarchyChanged += HananokiEditor_CustomHierarchy_HierarchyChanged;
+			EditorSceneManager.sceneOpened += HananokiEditor_CustomHierarchy_SceneOpened;
+
+			EditorApplication.playModeStateChanged += HananokiEditor_CustomHierarchy_PlayModeStateChanged;
+
 			ComponentHandler.Reset();
-			EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+			Helper.New( ref m_treeViewHideSelect );
+			m_treeViewHideSelect.UpdateRootGameObjects();
+
+			MissingScriptCheck.Setup();
+		}
+
+
+		/////////////////////////////////////////
+		static void HananokiEditor_CustomHierarchy_SceneOpened( Scene scene, OpenSceneMode mode ) {
+			ComponentHandler.Reset();
+
+			Helper.New( ref m_treeViewHideSelect );
+			m_treeViewHideSelect.UpdateRootGameObjects();
+
+			MissingScriptCheck.Setup( scene );
 		}
 
 
 
 		/////////////////////////////////////////
-		static void OnHierarchyChanged() {
+		static void HananokiEditor_CustomHierarchy_HierarchyChanged() {
 			DragAndDropEx.OnHierarchyChanged();
 			ComponentHandler.Reset();
+
+			Helper.New( ref m_treeViewHideSelect );
+			m_treeViewHideSelect.UpdateRootGameObjects();
+
+			MissingScriptCheck.HierarchyChanged();
 		}
 
 
 
 		/////////////////////////////////////////
-		static void OnPlayModeStateChanged( PlayModeStateChange playModeStateChange ) {
+		static void HananokiEditor_CustomHierarchy_PlayModeStateChanged( PlayModeStateChange playModeStateChange ) {
 			switch( playModeStateChange ) {
 			case PlayModeStateChange.EnteredPlayMode:
 			case PlayModeStateChange.EnteredEditMode:
@@ -67,7 +96,7 @@ namespace HananokiEditor.CustomHierarchy {
 
 
 		/////////////////////////////////////////
-		static void HierarchyWindowItemCallback( int instanceID, Rect selectionRect ) {
+		static void HananokiEditor_CustomHierarchy_HierarchyWindowItemCallback( int instanceID, Rect selectionRect ) {
 			//Debug.Log( selectionRect );
 			if( !E.i.Enable ) return;
 
@@ -81,7 +110,7 @@ namespace HananokiEditor.CustomHierarchy {
 
 			if( E.i.extendedDragAndDrop ) DragAndDropEx.Execute( selectionRect );
 
-			if( E.i.dockPaneBar ) DockPaneBar.Setup();
+			if( E.i.検索フィルターボタン ) DockPaneBar.Setup();
 			if( E.i.commandBar ) CommandBar.Setup();
 
 			if( !init ) {
@@ -125,9 +154,9 @@ namespace HananokiEditor.CustomHierarchy {
 			}
 
 
-			if( E.i.enableLineColor ) {
-				DrawBackColor( selectionRect, 0x01 );
-			}
+			if( E.i.enableLineColor ) DrawBackColor( selectionRect, 0x01 );
+
+			if( E.i.MissingScriptチェック ) MissingScriptCheck.Execute( selectionRect );
 
 
 			var rcL = selectionRect;
@@ -142,7 +171,7 @@ namespace HananokiEditor.CustomHierarchy {
 
 			if( E.i.Selectionのプレハブがヒエラルキー上にあると通知 ) {
 				if( Selection.activeGameObject != null ) {
-					var prt = PrefabUtility.GetPrefabParent( go);
+					var prt = PrefabUtility.GetPrefabParent( go );
 					if( prt == Selection.activeGameObject ) {
 						var cc = Color.green;
 						cc.a = 0.1f;
@@ -151,6 +180,8 @@ namespace HananokiEditor.CustomHierarchy {
 					}
 				}
 			}
+
+
 
 			if( E.i.activeToggle ) {
 				rc.x = rc.x - WIDTH;
@@ -393,7 +424,7 @@ namespace HananokiEditor.CustomHierarchy {
 							m.AddItem( "Revert All", ( context ) => {
 								(var a, var b) = (System.ValueTuple<UnityEditorPrefabOverridesWindow, GameObject>) context;
 								a.RevertAll();
-							}, new System.ValueTuple<UnityEditorPrefabOverridesWindow, GameObject>( wnd, go) );
+							}, new System.ValueTuple<UnityEditorPrefabOverridesWindow, GameObject>( wnd, go ) );
 						}
 						m.DropDownAtMousePosition();
 						//Event.current.Use();

@@ -1,14 +1,15 @@
-Vis skifte til skifte spil objekt aktiv
-Display præfabrikeret status med ikoner
-Flyt et niveau op
-Ping en scene fil ved at klikke på ikonet scene
-Vis mærkenavn og lagets navn
+Vis veksle for at skifte spil objekt aktivt
+Vis præfabrikat status med ikoner
+Flyt op på et niveau
+Ping en scenefil ved at klikke på sceneikonet
+Vis tagnavn og lagnavn
 Vis træet
-Vare display offset X
-Numerisk Kontrol
-Anvend alle
-Vend tilbage Alle
-Skjul GameObject
-Unhide GameObject
-Komponent Handler
-GameObject Slette-knap
+Vare display offset x
+NumPad Control.
+Ansøg alle
+Vende tilbage alt.
+Skjul GameObject.
+Unhide gameObject.
+Komponenthåndterer
+GameObject Slet-knap
+Registrer alle de komponenter, der anvendes i den aktuelle scene

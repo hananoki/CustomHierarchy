@@ -1,14 +1,15 @@
-Mostra a levetta levetta gioco di oggetti attivi
-Visualizzare lo stato prefabbricato con icone
-Sposta su di un livello
-Il ping di un file di scena facendo clic sull'icona scena
-Visualizzazione del nome di tag e nome del livello
-Visualizzare l'albero
-X offset di visualizzazione dell'oggetto
-controllo del tastierino numerico
+Mostra interrutti per attivare l'oggetto del gioco attivo
+Visualizza lo stato prefabbricato con le icone
+Sposta su un livello
+Ping un file di scena facendo clic sull'icona della scena
+Visualizza il nome del tag e il nome del livello
+Mostra l'albero
+Offset di visualizzazione dell'oggetto X
+Controllo numpad.
 Applicare tutte
-Ripristina Tutto
-Nascondi GameObject
-unhide GameObject
-componente Handler
-Pulsante Elimina GameObject
+Ripristina tutti
+Nascondi GameObject.
+Sospira GameObject.
+Gestore componente
+GameObject Elimina il pulsante
+Registra tutti i componenti utilizzati nella scena corrente

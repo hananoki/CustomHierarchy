@@ -3,15 +3,19 @@ using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using E = HananokiEditor.CustomHierarchy.SettingsEditor;
+using E = HananokiEditor.CustomHierarchy.EditorPref;
+
 
 namespace HananokiEditor.CustomHierarchy {
-	[System.Serializable]
-	public class SettingsEditor {
+
+	[Serializable]
+	public class EditorPref {
 
 		public int flag;
 
-		const int DOCKPANE_BAR = ( 1 << 0 );
+		#region Flags
+
+		const int _検索フィルターボタン = ( 1 << 0 );
 		const int COMMAND_BAR = ( 1 << 1 );
 		const int ICON_CLICK_CONTEXT = ( 1 << 2 );
 		const int COMPONENT_HANDLER = ( 1 << 3 );
@@ -26,10 +30,13 @@ namespace HananokiEditor.CustomHierarchy {
 		const int EXTEND_DD = ( 1 << 12 );
 		const int _ヒエラルキークリックでインスペクターFocus = ( 1 << 13 );
 		const int PREFAB_NOTIFY = ( 1 << 14 );
+		const int _プレイモード時はコンポーネントツールを消す = ( 1 << 15 );
+		const int _MissingScriptチェック = ( 1 << 16 );
 
-		public bool dockPaneBar {
-			get => flag.Has( DOCKPANE_BAR );
-			set => flag.Toggle( DOCKPANE_BAR, value );
+
+		public bool 検索フィルターボタン {
+			get => flag.Has( _検索フィルターボタン );
+			set => flag.Toggle( _検索フィルターボタン, value );
 		}
 		public bool commandBar {
 			get => flag.Has( COMMAND_BAR );
@@ -87,6 +94,15 @@ namespace HananokiEditor.CustomHierarchy {
 			get => flag.Has( PREFAB_NOTIFY );
 			set => flag.Toggle( PREFAB_NOTIFY, value );
 		}
+		public bool プレイモード時はコンポーネントツールを消す {
+			get => flag.Has( _プレイモード時はコンポーネントツールを消す );
+			set => flag.Toggle( _プレイモード時はコンポーネントツールを消す, value );
+		}
+		public bool MissingScriptチェック {
+			get => flag.Has( _MissingScriptチェック );
+			set => flag.Toggle( _MissingScriptチェック, value );
+		}
+		#endregion
 
 		public bool Enable = true;
 
@@ -115,16 +131,20 @@ namespace HananokiEditor.CustomHierarchy {
 		}
 
 
+		/////////////////////////////////////////
 		public static void Load() {
 			if( i != null ) return;
 			i = EditorPrefJson<E>.Get( Package.editorPrefName );
 		}
 
 
+		/////////////////////////////////////////
 		public static void Save() {
 			EditorPrefJson<E>.Set( Package.editorPrefName, i );
 		}
 
+
+		/////////////////////////////////////////
 		public static bool HasInspecClass( Type t ) {
 			foreach( var p in i.m_componentHandlerData ) {
 				if( p.type == t ) {
@@ -133,5 +153,18 @@ namespace HananokiEditor.CustomHierarchy {
 			}
 			return false;
 		}
+
+
+		/////////////////////////////////////////
+		public static bool HasShowTool( Type t ) {
+			foreach( var p in i.m_componentHandlerData ) {
+				if( p.type == t ) {
+					if( p.showTool ) return true;
+				}
+			}
+			return false;
+		}
+
+
 	}
 }

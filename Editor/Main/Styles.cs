@@ -23,8 +23,8 @@ namespace HananokiEditor.CustomHierarchy {
 		public Texture2D MissingPrefabInstance => Icon._MissingPrefabInstance;
 		public Texture2D DisconnectedPrefab => Icon._DisconnectedPrefab;
 		public Texture2D DisconnectedModelPrefab => Icon._DisconnectedModelPrefab;
-		public Texture2D TreeLine => Icon.CH_I;
-		public Texture2D TreeLineB => Icon.CH_T;
+		public Texture2D TreeLine => EditorIcon.CH_I;
+		public Texture2D TreeLineB => EditorIcon.CH_T;
 
 
 		public GUIStyle ControlLabel;

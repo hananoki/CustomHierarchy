@@ -1,14 +1,15 @@
-Sýna skipta til að skipta leikur mótmæla virka
-Birta Húshlutar stöðu með táknum
-Fara upp um eitt þrep
-Ping a vettvangur skrá með því að smella á Umhverfistákn
-Sýna tag nafn og lagið heiti
-Birta tré
-Item sýna móti X
-Numpad Control
-beita öllum
-baka allar
-fela GameObject
-Birta GameObject
-Component Handler
-GameObject Eyða hnappinn
+Sýna skipta til að skipta um leik Object virka
+Skoðaðu prefab stöðu með táknum
+Færðu upp eitt stig
+Ping vettvangsskrá með því að smella á svæðisstjórann
+Sýna tag Nafn og Layer Name
+Sýna tréð
+Liður sýna móti x
+Numpad Control.
+Sækja um allt.
+Snúa aftur öllum
+Fela GameObject
+Unhide GameObject
+Hluti handler
+GameObject eyða hnappinum
+Skráðu alla hluti sem notuð eru í núverandi vettvangi

@@ -1,14 +1,15 @@
-Mostra palanca a objecte de joc de palanca activa
-Mostra l'estat prefabricada amb icones
-Pujar un nivell
-Ping a un arxiu d'escena fent clic a la icona d'escena
-Display nom de l'etiqueta i el nom de capa de
+Mostra el commutador per canviar l'objecte de joc actiu
+Mostra l'estat prefabricat amb les icones
+Moure un nivell
+Ping un fitxer d'escena fent clic a la icona d'escena
+Mostra el nom de la etiqueta i el nom de la capa
 Mostra l'arbre
-X visualització de partides de compensació
-control de teclat numèric
-aplicar tot
-tot Revert
-Amaga GameObject
-a Mostra GameObject
-component Handler
-GameObject botó Elimina
+Display Display Offset X
+Control de Numpad
+Aplicar-ho tot
+Revertir tot
+Amaga el joc
+Mostrar gameobject
+Manipulador de components
+Botó de supressió del joc
+Registreu tots els components utilitzats a l'escena actual

@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 #endif
 
-using E = HananokiEditor.CustomHierarchy.SettingsEditor;
+using E = HananokiEditor.CustomHierarchy.EditorPref;
 
 namespace HananokiEditor.CustomHierarchy {
 	public static class DockPaneBar {
@@ -18,13 +18,11 @@ namespace HananokiEditor.CustomHierarchy {
 		internal static int s_initButton = -1;
 
 
-
-
 		internal static void Setup() {
 			if( !UnitySymbol.UNITY_2019_1_OR_NEWER ) return;
 
 			if( s_initButton < 0 ) {
-				if( E.i.dockPaneBar ) {
+				if( E.i.検索フィルターボタン ) {
 					RegisterDockPane();
 					s_initButton = 1;
 				}
@@ -56,7 +54,7 @@ namespace HananokiEditor.CustomHierarchy {
 
 			con.style.height = 20;
 			con.style.marginRight = 42;
-			con.style.width = 144 + 8;
+			con.style.width = (26*10) + 8;
 			con.style.alignSelf = Align.FlexEnd;
 
 			//if( UnitySymbol.UNITY_2019_3_OR_NEWER ) {
@@ -85,33 +83,15 @@ namespace HananokiEditor.CustomHierarchy {
 		static void OnDrawDockPane() {
 
 			ScopeHorizontal.Begin();
-			GUILayout.FlexibleSpace();
+			//GUILayout.FlexibleSpace();
 
-			if( HEditorGUILayout.IconButton( EditorIcon.icons_processed_unityengine_gameobject_icon_asset, "GameObject" ) ) {
-				EditorApplication.ExecuteMenuItem( "GameObject/Create Empty Child" );
+			foreach(var p in E.i.m_componentHandlerData ) {
+				if( !p.search ) continue;
+
+				if( HEditorGUILayout.IconButton( p.type.GetIcon() ) ){
+					SceneModeUtility.SearchForType( SceneHierarchyUtils.searchFilter == $"t:{p.type.Name}" ? null : p.type );
+				}
 			}
-			if( HEditorGUILayout.IconButton( EditorIcon.icons_processed_unityengine_particlesystem_icon_asset, "ParticleSystem" ) ) {
-				EditorApplication.ExecuteMenuItem( "GameObject/Effects/Particle System" );
-			}
-			if( HEditorGUILayout.IconButton( EditorIcon.icons_processed_unityengine_ui_image_icon_asset, "Image" ) ) {
-				EditorApplication.ExecuteMenuItem( "GameObject/UI/Image" );
-			}
-			if( HEditorGUILayout.IconButton( EditorIcon.icons_processed_unityengine_ui_rawimage_icon_asset, "RawImage" ) ) {
-				EditorApplication.ExecuteMenuItem( "GameObject/UI/Raw Image" );
-			}
-			if( HEditorGUILayout.IconButton( EditorIcon.icons_processed_collabdeleted_icon_asset, "Selection Clear" ) ) {
-				Selection.activeObject = null;
-			}
-			//if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_timeline_timelinewindow, SS._Timeline ) ) {
-			//	HEditorWindow.ShowWindow( UnityTypes.UnityEditor_Timeline_TimelineWindow );
-			//}
-			//GUILayout.Space( 8 );
-			//if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_consolewindow, SS._Console ) ) {
-			//	HEditorWindow.ShowWindow( UnityTypes.UnityEditor_ConsoleWindow );
-			//}
-			//if( HEditorGUILayout.IconButton( EditorIcon.unityeditor_profilerwindow, SS._Profiler ) ) {
-			//	HEditorWindow.ShowWindow( UnityTypes.UnityEditor_ProfilerWindow );
-			//}
 
 			GUILayout.Space( 12 );
 			ScopeHorizontal.End();

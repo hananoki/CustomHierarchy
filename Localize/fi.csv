@@ -1,14 +1,15 @@
-Näytä askelluksen Indonesialainen pelin tavoite aktiivinen
-Näyttö valmistalo asema kuvakkeet
-Siirry ylemmälle tasolle
-Ping kohtaus ohjelma napsauttamalla näkymäkuvake
-Näyttö tunnisteen nimi ja tason nimi
-Näyttö puu
-Tuote näyttö offset X
-numpadin Ohjaus
-Käytä kaikkiin
-palauttaa kaikki
-Piilota GameObject
-unhide GameObject
-komponentti Handler
-GameObject delete -näppäintä
+Näytä Vaihda pelin objektin aktiivi
+Näytä prefab-tila kuvakkeilla
+Siirrä yksi taso
+Ping Scene File klikkaamalla kohtauskuvaketta
+Näyttötunnisteen nimi ja kerros nimi
+Näytä puu
+Kohteen näyttö Offset X
+NumPad Control
+Käytä kaikkia
+Palauta kaikki
+Piilota Gameobject
+Unleda Gamebject
+Komponenttikäsikirja
+GameObject Delete -painike
+Rekisteröidy kaikki nykyisessä kohtauksessa käytetyt komponentit

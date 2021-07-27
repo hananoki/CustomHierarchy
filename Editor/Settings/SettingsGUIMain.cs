@@ -2,11 +2,13 @@
 using HananokiEditor.SharedModule;
 using UnityEditor;
 using UnityEngine;
-using E = HananokiEditor.CustomHierarchy.SettingsEditor;
+using E = HananokiEditor.CustomHierarchy.EditorPref;
 using SS = HananokiEditor.SharedModule.S;
 
+
 namespace HananokiEditor.CustomHierarchy {
-	public class SettingsDrawer_Main {
+
+	public class SettingsGUIMain {
 
 		[HananokiSettingsRegister]
 		public static SettingsItem RegisterSettings() {
@@ -74,13 +76,14 @@ namespace HananokiEditor.CustomHierarchy {
 			ScopeDisable.Begin( !E.i.componentHandler );
 			EditorGUI.indentLevel++;
 			E.i.componentToolPos = EditorGUILayout.FloatField( "componentToolPos".nicify(), E.i.componentToolPos );
+			E.i.プレイモード時はコンポーネントツールを消す = HEditorGUILayout.ToggleLeft( "プレイモード時はコンポーネントツールを消す", E.i.プレイモード時はコンポーネントツールを消す );
+
 			EditorGUI.indentLevel--;
 			ScopeDisable.End();
 
-			E.i.removeGameObject = HEditorGUILayout.ToggleLeft( S._GameObjectDeleteButton, E.i.removeGameObject );
 
 			ScopeChange.Begin();
-			E.i.dockPaneBar = HEditorGUILayout.ToggleLeft( "ShortCutBar (UNITY_2019_1_OR_NEWER)", E.i.dockPaneBar );
+			E.i.検索フィルターボタン = HEditorGUILayout.ToggleLeft( "Search Filter Button (UNITY_2019_1_OR_NEWER)", E.i.検索フィルターボタン );
 			if( ScopeChange.End() ) {
 				DockPaneBar.s_initButton = -1;
 				DockPaneBar.Setup();
@@ -97,18 +100,22 @@ namespace HananokiEditor.CustomHierarchy {
 				EditorWindowUtils.RepaintHierarchyWindow();
 			}
 			E.i.Selectionのプレハブがヒエラルキー上にあると通知 = HEditorGUILayout.ToggleLeft( "Selectionのプレハブがヒエラルキー上にあると通知", E.i.Selectionのプレハブがヒエラルキー上にあると通知 );
+			E.i.MissingScriptチェック = HEditorGUILayout.ToggleLeft( "Missing Script Detection (UNITY_2019_2_OR_NEWER)", E.i.MissingScriptチェック );
 			GUILayout.Space( 8f );
 
+			//
 			/////////////////////////
 			HEditorGUILayout.HeaderTitle( $"* Obsolete" );
 			E.i.ヒエラルキークリックでインスペクターFocus = HEditorGUILayout.ToggleLeft( "ヒエラルキークリックでインスペクターFocus", E.i.ヒエラルキークリックでインスペクターFocus );
+			E.i.removeGameObject = HEditorGUILayout.ToggleLeft( S._GameObjectDeleteButton, E.i.removeGameObject );
 
 			ScopeDisable.End();
 
 			EditorGUI.indentLevel--;
 
 			if( ScopeChange.End() ) {
-				CustomHierarchy.initSelection = false;
+				MissingScriptCheck.Setup();
+				Main.initSelection = false;
 				EditorWindowUtils.RepaintHierarchyWindow();
 				E.Save();
 			}

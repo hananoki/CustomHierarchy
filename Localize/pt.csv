@@ -1,14 +1,15 @@
-Mostrar alternância para jogo de alternância objeto ativo
-Exibir o status pré-fabricada com ícones
-Mover um nível acima
-Ping em um arquivo de cena clicando no ícone da cena
-Visualização do nome tag e nome da camada
-Mostrar a árvore
-exibição de partidas compensadas X
-Controle Numpad
+Mostrar alternar para alternar objeto do jogo ativo
+Exibir o status pré-fabricado com ícones
+Subir um nível
+Ping um arquivo de cena clicando no ícone da cena
+Exibir nome da tag e nome da camada
+Exibir a árvore
+Exibição do item Offset X
+Controle de Numpad.
 Aplicar tudo
-Reverter Tudo
-Esconder GameObject
-unhide GameObject
-Handler Component
-GameObject botão Excluir
+Reverta todos
+Esconder gameobject.
+Unhide gameobject.
+Manipulador de componentes
+Botão GameObject Excluir.
+Registre todos os componentes usados ​​na cena atual

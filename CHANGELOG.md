@@ -1,5 +1,21 @@
 # Custom Hierarchy
 
+## [0.9.0] - 2021-07-27
+- `SharedModule v1.12.0` or later
+
+### Added
+- Added Search filter button
+- Added Missing Script Detection
+- Added integration between Command Bar and Selection History
+- Added Hide Flag Tree
+
+### Changed
+- Rename source file
+- Command Bar Undo/Redo
+
+### Fixed
+- Fixed to react when a new target is specified while the Component Editor Window is displayed.
+
 ## [0.8.0] - 2021-06-30
 - `SharedModule v1.11.0` or later
 

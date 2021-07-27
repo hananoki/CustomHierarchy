@@ -1,9 +1,10 @@
-﻿
-using HananokiEditor.Extensions;
+﻿using HananokiEditor.Extensions;
 using UnityEditor;
 using UnityEngine;
 using UnityReflection;
+using E = HananokiEditor.CustomHierarchy.EditorPref;
 using SS = HananokiEditor.SharedModule.S;
+
 
 namespace HananokiEditor.CustomHierarchy {
 	public static class IconClickContext {
@@ -13,15 +14,23 @@ namespace HananokiEditor.CustomHierarchy {
 			if( !EditorHelper.HasMouseClick( rect ) ) return;
 
 			var m = new GenericMenu();
-			m.AddItem( SS._OpenInNewInspector, EditorContextHandler.ShowNewInspectorWindow, CustomHierarchy.go );
-			m.AddItem( S._HideGameObject, _Hide, CustomHierarchy.go );
-			m.AddItem( "DontDestroyOnLoad", _DontDestroyOnLoad, CustomHierarchy.go );
+			m.AddItem( SS._OpenInNewInspector, EditorContextHandler.ShowNewInspectorWindow, Main.go );
+			m.AddItem( S._HideGameObject, _Hide, Main.go );
+			if( E.i.MissingScriptチェック ) {
+				if( MissingScriptCheck.Is( Main.go ) ) {
+					m.AddItem( "Remove MonoBehaviours With MissingScript", _RemoveComponent, Main.go );
+				}
+				else {
+					m.AddDisabledItem( "Remove MonoBehaviours With MissingScript" );
+				}
+			}
+			//m.AddItem( "DontDestroyOnLoad", _DontDestroyOnLoad, Main.go );
 
-			var status = UnityEditorPrefabUtility.GetPrefabInstanceStatus( CustomHierarchy.go );
+			var status = UnityEditorPrefabUtility.GetPrefabInstanceStatus( Main.go );
 			if( status == PrefabInstanceStatus.Connected ) {
 				m.AddSeparator();
 
-				var wnd = new UnityEditorPrefabOverridesWindow( CustomHierarchy.go );
+				var wnd = new UnityEditorPrefabOverridesWindow( Main.go );
 				if( !wnd.IsShowingActionButton() ) {
 					m.AddDisabledItem( S._ApplyAll );
 					m.AddDisabledItem( S._RevertAll );
@@ -36,10 +45,19 @@ namespace HananokiEditor.CustomHierarchy {
 			m.DropDownPopupRect( rect );
 		}
 
-		static void _DontDestroyOnLoad( object context ) {
+		//static void _DontDestroyOnLoad( object context ) {
+		//	var gobj = context as GameObject;
+		//	Object.DontDestroyOnLoad( gobj );
+		//}
+
+		static void _RemoveComponent( object context ) {
 			var gobj = context as GameObject;
-			Object.DontDestroyOnLoad( gobj );
+#if UNITY_2019_2_OR_NEWER
+			GameObjectUtility.RemoveMonoBehavioursWithMissingScript( gobj );
+			EditorUtility.SetDirty( gobj );
+#endif
 		}
+
 
 		static void _Hide( object context ) {
 			var gobj = context as GameObject;

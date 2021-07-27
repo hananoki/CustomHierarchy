@@ -3,10 +3,12 @@ using System.Collections;
 using UnityEditor;
 using UnityObject = UnityEngine.Object;
 
+
 namespace HananokiEditor.CustomHierarchy {
 	public class ComponentEditorCache {
 
 		static Hashtable s_editors;
+
 
 		/////////////////////////////////////////
 		public static Editor Get( UnityObject component ) {

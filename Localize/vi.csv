@@ -1,14 +1,15 @@
-Hiện Toggle để đối tượng chuyển đổi trò chơi tích cực
-Hiển thị trạng thái prefab với các biểu tượng
-Di chuyển lên một cấp
-Ping một tập tin cảnh bằng cách nhấn vào biểu tượng cảnh
-tên thẻ hiển thị và tên lớp
+Hiển thị chuyển đổi để chuyển đổi đối tượng trò chơi hoạt động
+Hiển thị trạng thái Prefab với các biểu tượng
+Di chuyển lên một cấp độ
+Ping một tập tin cảnh bằng cách nhấp vào biểu tượng cảnh
+Hiển thị tên thẻ và tên lớp
 Hiển thị cây
-X item hiển thị bù đắp
-Numpad kiểm soát
-Áp dụng Tất cả
-Revert Tất cả
-Ẩn GameObject
-Bỏ ẩn GameObject
-Hợp phần Handler
-GameObject nút Xóa
+Mục hiển thị Offset X
+Điều khiển Numpad
+Áp dụng tất cả
+Hoàn nguyên tất cả
+Ẩn GameObject.
+Bỏ ẩn GameObject.
+Xử lý thành phần.
+Nút GameObject Xóa
+Đăng ký tất cả các thành phần được sử dụng trong cảnh hiện tại

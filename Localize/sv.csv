@@ -1,14 +1,15 @@
-Visa toggle att växla spelsyfte aktiv
-Visa prefab status med ikoner
+Visa växla för att växla spelobjektet aktivt
+Visa Prefab-status med ikoner
 Flytta upp en nivå
-Pinga en scen-fil genom att klicka på ikonen scenen
-Visningstaggnamn och lagernamn
-Visa träd
-Objektet display offset X
-Numerisk kontroll
+Ping en scenfil genom att klicka på ikonen Scene
+Visa taggnamn och lagernamn
+Visa trädet
+Objekt display offset x
+NUMPAD CONTROL
 Tillämpa alla
-återställa alla
-hide GameObject
-Ta fram GameObject
-komponent Handler
+Återgå alla
+Dölj GameObject
+Unhide GameObject
+Komponenthanterare
 GameObject Delete Button
+Registrera alla komponenter som används i den aktuella scenen

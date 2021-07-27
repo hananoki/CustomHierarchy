@@ -1,14 +1,15 @@
-Arată de comutare pentru a comuta joc obiect activ
-Afișează starea prefabricat cu pictograme
-Mutare în sus cu un nivel
-Atenționați un fișier scenă, făcând clic pe pictograma scenă
-nume de etichetă de afișare și numele stratului
-Afișarea copac
-X afișare Postul de offset
-Numpad de control
+Afișați comutați pentru a comuta obiectul de joc activ
+Afișați starea prefabricată cu pictogramele
+Mutați un nivel
+Ping un fișier scenă făcând clic pe pictograma scenă
+Afișați numele etichetei și numele stratului
+Afișați copacul
+Afișarea articolului Offset X
+Numpad control
 Aplica tot
-Toate Revocați
+Reveniți la toți
 Ascundeți GameObject
 Unhide GameObject
-Componenta Handler
-GameObject butonul Delete
+Handler de componente
+Butonul de ștergere GameObject.
+Înregistrați toate componentele utilizate în scena curentă

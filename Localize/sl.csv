@@ -1,14 +1,15 @@
-Prikaži preklopi na preklop igre predmet aktivnega
-Prikaži montažnih stanje z ikonami
-Premik za eno stopnjo
-Ping datoteko scene s klikom na ikono sceno
-Zaslon ime oznake in ime plast
-Prikaz drevo
-Točka zaslon zamik X
-številčnici Control
-Uporabi All
-Povrni Vse
-Skrij GameObject
-Razkrij GameObject
-komponenta Handler
-GameObject Izbriši Button
+Pokaži Toggle za Toggle Game Active Active
+Zaslon Prefab Status z ikonami
+Premaknite se na eno raven
+Ping sceno datoteko s klikom na ikono scene
+Ime oznake oznake in ime sloja
+Prikažite drevo
+Postavka Offset X
+Nadzor NUMPAD.
+Uporabite vse
+Povrni vse
+Skrij GameObject.
+Razkrijejo gameobject.
+Upravljalnik sestavnih delov
+GarmoBject Brisanje
+Registrirajte vse komponente, ki se uporabljajo v trenutni sceni

@@ -1,14 +1,15 @@
-Zobraziť toggle k prepínanie herného objektu aktívneho
-Zobraziť Montovaná Stav s ikonami
-O úroveň vyššie
-Ping súboru scény kliknutím na ikonu scény
-Zobrazované meno tag a názov vrstvy
+Zobraziť prepínač prepínania hier Object Active
+Stav prefabriky s ikonami
+Presunúť jednu úroveň
+Ping súbor scény kliknutím na ikonu scény
+Zobrazenie názvu štítku a Názov vrstvy
 Zobraziť strom
-Displej Položka offset X
+Položka Zobrazenie ofset X
 Numpad Control
-použiť všetko
-vrátiť všetko
-hide GameObject
-odkryť GameObject
-handler komponenta
-Button GameObject Delete
+Aplikujte všetko
+Vrátiť všetko
+Skryť gameObject
+UNHIDE GAMEOBJEK
+Komponent
+Tlačidlo GAMEOBJEK
+Zaregistrujte všetky komponenty používané v aktuálnej scéne

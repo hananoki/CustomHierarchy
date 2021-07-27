@@ -1,14 +1,15 @@
-Itt található kapcsoló segítségével válthat játék célja az aktív
-A kijelző panel státusz ikonok
-Egy szinttel feljebb
-Ping egy jelenetet fájlt, kattintson a jelenet ikonra
-Display tag neve és a réteg neve
-A kijelző a fa
-Elem kijelző eltolás X
+A váltás megjelenítése a játékobjektum kapcsolásához aktív
+A PREFAB állapot megjelenítése ikonokkal
+Mozgassa fel az egyik szintet
+Ping egy jelenetfájlt a jelenet ikonra kattintva
+Kijelző címke neve és réteg neve
+Jelenítse meg a fát
+Elem kijelző X
 Numpad vezérlés
-Az összes alkalmazása
-visszaállításához
-elrejtése GameObject
-felfedése GameObject
-Component Handler
-GameObject Törlés gomb
+Mindent alkalmaz
+Visszaáll
+Elrejti a játékot
+A GameObject Unhide
+Alkatrészkezelő
+GameObject Delete gomb
+Regisztrálja az aktuális jelenetben használt összes összetevőt

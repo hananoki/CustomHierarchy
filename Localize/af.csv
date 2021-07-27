@@ -1,14 +1,15 @@
-Wys skakel om te wissel spel voorwerp aktiewe
+Wys skakel om die spelvoorwerp aktief te skakel
 Vertoon prefab status met ikone
-Beweeg op een vlak
-Ping 'n toneel lêer deur te kliek op die ikoon toneel
-Vertoning tag naam en laag naam
-die boom vertoon
-Item vertoon geneutraliseer X
-numeriese eiland Control
-aansoek doen All
-Terugkeer Alle
-verberg GameObject
-Wys GameObject
-komponent Handler
+Beweeg een vlak op
+Ping 'n toneellêer deur op die toneelikoon te klik
+Wys tag naam en laag naam
+Wys die boom
+Item Display Offset X
+NUMPAD CONTROL
+Pas alles toe
+Keer terug
+Versteek GameObject
+Unhide gameobject
+Komponent Handler
 GameObject Delete Button
+Registreer al die komponente wat in die huidige toneel gebruik word

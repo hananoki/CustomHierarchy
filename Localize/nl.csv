@@ -1,14 +1,15 @@
-Toon toggle naar toggle doel van het spel actief
-Toon prefab-status met pictogrammen
-Move up one level
-Ping een scène bestand door te klikken op het pictogram van een scene
-Weergave tag naam en laagnaam
-de boom weer te geven
-Item weergave offset X
-Numpad Controle
+Show Toggle to Toggle Game Object Active
+Prefab-status weergeven met pictogrammen
+Omhoog een niveau verhuizen
+Een scène-bestand ping door op het scène-pictogram te klikken
+Display tag naam en laagnaam
+Toon de boom
+Item Display Offset X
+NumPad Control
 Alles toepassen
-Revert Alle
-verbergen GameObject
-Zichtbaar maken GameObject
-component Handler
-GameObject knop Verwijderen
+REVERT ALLES
+Verberg gameObject
+Zichtbaar gameobject
+Componenthandler
+GameObject Delete-knop
+Registreer alle componenten die in de huidige scène worden gebruikt

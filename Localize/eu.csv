@@ -1,14 +1,15 @@
-Erakutsi toggle toggle Joko Objektu aktibo
-Erakutsi status prefab ikonoak
-Eraman maila bat gora
-Ping eszena fitxategi baten eszena ikonoa klik eginez
-Display etiketaren izena eta geruzaren izena
-Erakutsi zuhaitzean
-Elementu pantaila desplazamendu X
-Numpad Control
+Erakutsi txandakatzea joko objektua aktibatzeko
+Bistaratu aurrez aurreko egoera ikonoekin
+Mugitu maila bat gora
+Eszena fitxategi bat ping eszena ikonoan klik eginez
+Bistaratu etiketaren izena eta geruzaren izena
+Bistaratu zuhaitza
+Elementuaren bistaratzea desplazamendua x
+Numpad kontrola
 Aplikatu guztiak
-revert guztiak
-ezkutatu GameObject
-Erakutsi GameObject
-Osagai Handler
-GameObject Ezabatu Button
+Itzuli guztiak
+Ezkutatu Gameobject
+Ezkutatu jokoBject
+Osagai kudeatzailea
+GameBject Ezabatu botoia
+Eman izena uneko eszenan erabilitako osagai guztiak
